@@ -4,13 +4,15 @@ import { About } from "@/components/About"
 import { Portfolio } from "@/components/Portfolio"
 import { Contact } from "@/components/Contact"
 import { WhatsAppFloat } from "@/components/WhatsAppFloat"
+import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { useLanguage } from "@/hooks/use-language"
 
 export default function Home() {
   const { t } = useLanguage()
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <AnimatedBackground />
       <Navigation />
       <Hero />
       <About />

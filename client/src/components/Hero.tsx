@@ -32,7 +32,7 @@ export function Hero() {
   }
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 section-bg-1">
       {/* Background Animation */}
       <div className="absolute inset-0 opacity-30">
         <motion.div 

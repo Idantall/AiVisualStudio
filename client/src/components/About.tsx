@@ -45,7 +45,7 @@ export function About() {
   }
 
   return (
-    <section id="about" className="py-20 bg-white dark:bg-gray-800 transition-colors duration-300">
+    <section id="about" className="py-20 section-bg-2 transition-colors duration-300">
       <div className="container mx-auto px-6">
         <motion.div 
           className="text-center mb-16"

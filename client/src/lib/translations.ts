@@ -59,7 +59,7 @@ export const translations = {
     },
     footer: {
       subtitle: "יוצרים את התוכן של מחר עם הטכנולוגיה של היום",
-      copyright: "© 2024 סטודיו וידאו AI. כל הזכויות שמורות."
+      copyright: "© 2024 NEHORAI. כל הזכויות שמורות."
     },
     whatsapp: {
       tooltip: "שוחח איתנו בוואטסאפ"
@@ -125,7 +125,7 @@ export const translations = {
     },
     footer: {
       subtitle: "Creating tomorrow's content with today's AI technology",
-      copyright: "© 2024 AI Video Studio. All rights reserved."
+      copyright: "© 2024 NEHORAI. All rights reserved."
     },
     whatsapp: {
       tooltip: "Chat with us on WhatsApp"

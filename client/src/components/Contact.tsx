@@ -54,7 +54,7 @@ export function Contact() {
     {
       icon: Mail,
       title: t("contact.email"),
-      value: "contact@aivideo.studio",
+      value: "nehoraytal2@gmail.com",
       description: t("contact.email_desc"),
       gradient: "from-primary to-accent"
     },

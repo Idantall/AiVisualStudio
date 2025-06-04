@@ -57,7 +57,7 @@ export function Navigation() {
             <img 
               src={nehorLogo} 
               alt="NEHORAI" 
-              className="h-20 w-auto filter invert dark:invert-0"
+              className="h-10 w-auto"
             />
           </motion.div>
 

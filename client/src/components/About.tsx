@@ -109,7 +109,7 @@ export function About() {
               />
               <div className="absolute bottom-4 left-4 right-4 glass-effect p-4 rounded-xl">
                 <p className="text-sm text-center font-medium text-white">
-                  AI Video Specialist
+                  אני נהוראי, נעים להכיר
                 </p>
               </div>
             </div>

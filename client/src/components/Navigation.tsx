@@ -50,13 +50,14 @@ export function Navigation() {
 
           {/* Logo in top right */}
           <motion.div 
-            className="flex items-center"
+            className="flex items-center cursor-pointer"
             whileHover={{ scale: 1.05 }}
+            onClick={() => scrollToSection("home")}
           >
             <img 
               src={nehorLogo} 
               alt="NEHORAI" 
-              className="h-16 w-auto filter invert dark:invert-0"
+              className="h-20 w-auto filter invert dark:invert-0"
             />
           </motion.div>
 

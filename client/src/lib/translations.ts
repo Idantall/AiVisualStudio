@@ -9,6 +9,13 @@ export const translations = {
     hero: {
       title: "קסם וידאו AI",
       subtitle: "מתעורר לחיים",
+      typewriter: [
+        "סרטונים ריאליסטיים מדהימים",
+        "אנימציות בסגנון פיקסאר",
+        "תוכן וידאו יצירתי וייחודי",
+        "סרטונים מתקדמים בבינה מלאכותית",
+        "חוויות חזותיות מרהיבות"
+      ],
       description: "הפכו את הרעיונות שלכם לסרטוני AI מדהימים ואנימציות. מסצנות ריאליסטיות ועד קסם בסגנון פיקסאר - אנחנו מחיים את החזון שלכם.",
       cta: "בואו נתחיל",
       portfolio: "צפה בתיק עבודות"
@@ -68,6 +75,13 @@ export const translations = {
     hero: {
       title: "AI Video Magic",
       subtitle: "Brought to Life",
+      typewriter: [
+        "Stunning Realistic Videos",
+        "Pixar-Style Animations", 
+        "Creative Video Content",
+        "Advanced AI-Generated Media",
+        "Breathtaking Visual Experiences"
+      ],
       description: "Transform your ideas into stunning AI-generated videos and animations. From realistic scenes to Pixar-style magic - we bring your vision to life.",
       cta: "Get Started",
       portfolio: "View Portfolio"

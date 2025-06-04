@@ -1,10 +1,21 @@
 import { motion } from "framer-motion"
 import { useLanguage } from "@/hooks/use-language"
+import { useTypewriter } from "@/hooks/use-typewriter"
 import { Button } from "@/components/ui/button"
 import { Play, ArrowLeft, ArrowRight } from "lucide-react"
 
 export function Hero() {
   const { language, t } = useLanguage()
+  
+  // Get typewriter words based on current language
+  const typewriterData = t("hero.typewriter")
+  const typewriterWords = Array.isArray(typewriterData) ? typewriterData : [typewriterData]
+  const { text: typewriterText } = useTypewriter({
+    words: typewriterWords,
+    typeSpeed: 80,
+    deleteSpeed: 40,
+    delayBetweenWords: 3000
+  })
 
   const scrollToPortfolio = () => {
     const element = document.getElementById("portfolio")
@@ -80,6 +91,11 @@ export function Hero() {
             <span className="gradient-text">{t("hero.title")}</span>
             <br />
             <span className="text-gray-900 dark:text-white">{t("hero.subtitle")}</span>
+            <br />
+            <span className="text-3xl md:text-4xl font-semibold text-primary mt-4 block min-h-[1.2em]">
+              {typewriterText}
+              <span className="animate-pulse text-accent">|</span>
+            </span>
           </motion.h1>
 
           <motion.p 

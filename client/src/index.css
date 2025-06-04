@@ -67,6 +67,10 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
   
+  [dir="rtl"] body {
+    font-family: 'Heebo', 'Inter', system-ui, sans-serif;
+  }
+  
   html {
     scroll-behavior: smooth;
   }

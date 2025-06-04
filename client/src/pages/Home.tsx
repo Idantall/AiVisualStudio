@@ -6,6 +6,7 @@ import { Contact } from "@/components/Contact"
 import { WhatsAppFloat } from "@/components/WhatsAppFloat"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { useLanguage } from "@/hooks/use-language"
+import nehorLogo from "@assets/IMG_8249.png"
 
 export default function Home() {
   const { t } = useLanguage()
@@ -23,8 +24,12 @@ export default function Home() {
       <footer className="section-bg-2 text-foreground py-12">
         <div className="container mx-auto px-6">
           <div className="text-center">
-            <div className="text-3xl font-bold gradient-text mb-4">
-              AI Video Studio
+            <div className="flex justify-center mb-4">
+              <img 
+                src={nehorLogo} 
+                alt="NEHORAI" 
+                className="h-16 w-auto"
+              />
             </div>
             <p className="text-gray-400 mb-6">
               {t("footer.subtitle")}

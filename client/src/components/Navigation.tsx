@@ -4,7 +4,7 @@ import { useTheme } from "@/components/ui/theme-provider"
 import { useLanguage } from "@/hooks/use-language"
 import { Button } from "@/components/ui/button"
 import { Moon, Sun, Menu, X, Video } from "lucide-react"
-import nehorLogo from "@assets/431472D6-59E2-4AEE-B02D-18733F434720.jpeg"
+import nehorLogo from "@assets/IMG_8249.png"
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)

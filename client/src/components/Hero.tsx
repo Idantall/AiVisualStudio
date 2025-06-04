@@ -90,8 +90,6 @@ export function Hero() {
           >
             <span className="gradient-text">{t("hero.title")}</span>
             <br />
-            <span className="text-gray-900 dark:text-white">{t("hero.subtitle")}</span>
-            <br />
             <span className="text-3xl md:text-4xl font-semibold text-primary mt-4 block min-h-[1.2em]">
               {typewriterText}
               <span className="typewriter-cursor text-accent">|</span>

@@ -33,11 +33,13 @@ export function Portfolio() {
         },
         {
           id: 2,
-          title: "Realistic Video Sample 3"
+          title: "Realistic Video Style 2",
+          youtubeId: "qORP8UOeJl4"
         },
         {
           id: 3,
-          title: "Realistic Video Sample 4"
+          title: "Realistic Video Style 3",
+          youtubeId: "yj4lfjVzzp8"
         }
       ]
     },
@@ -59,11 +61,13 @@ export function Portfolio() {
         },
         {
           id: 2,
-          title: "Animation Sample 3"
+          title: "Animation Style 3",
+          youtubeId: "3fhbhWZr1JE"
         },
         {
           id: 3,
-          title: "Animation Sample 4"
+          title: "Animation Style 4",
+          youtubeId: "BvmsMg8fSYE"
         }
       ]
     },

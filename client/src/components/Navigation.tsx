@@ -4,6 +4,7 @@ import { useTheme } from "@/components/ui/theme-provider"
 import { useLanguage } from "@/hooks/use-language"
 import { Button } from "@/components/ui/button"
 import { Moon, Sun, Menu, X, Video } from "lucide-react"
+import nehorLogo from "@assets/431472D6-59E2-4AEE-B02D-18733F434720.png"
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -34,17 +35,29 @@ export function Navigation() {
     >
       <div className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          {/* Logo */}
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
+            {["home", "about", "portfolio", "contact"].map((item) => (
+              <button
+                key={item}
+                onClick={() => scrollToSection(item)}
+                className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors font-medium"
+              >
+                {t(`nav.${item}`)}
+              </button>
+            ))}
+          </div>
+
+          {/* Logo in top right */}
           <motion.div 
-            className="flex items-center space-x-2 rtl:space-x-reverse"
+            className="flex items-center"
             whileHover={{ scale: 1.05 }}
           >
-            <div className="w-10 h-10 bg-gradient-to-r from-primary to-accent rounded-xl flex items-center justify-center animate-glow">
-              <Video className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold gradient-text">
-              {language === "he" ? "סטודיו וידאו AI" : "AI Video Studio"}
-            </span>
+            <img 
+              src={nehorLogo} 
+              alt="NEHOR AI" 
+              className="h-12 w-auto filter invert dark:invert-0"
+            />
           </motion.div>
 
           {/* Desktop Navigation */}

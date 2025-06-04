@@ -33,7 +33,7 @@ export function Navigation() {
       animate={{ y: 0 }}
       className="fixed top-0 w-full z-50 glass-effect border-b border-white/20 dark:border-gray-700/20"
     >
-      <div className="container mx-auto px-6 py-0">
+      <div className="container mx-auto px-6 py-2">
         <div className="flex justify-between items-center">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
@@ -57,7 +57,7 @@ export function Navigation() {
             <img 
               src={nehorLogo} 
               alt="NEHORAI" 
-              className="h-12 w-auto filter invert dark:invert-0"
+              className="h-16 w-auto filter invert dark:invert-0"
             />
           </motion.div>
 

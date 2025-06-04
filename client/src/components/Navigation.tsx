@@ -55,23 +55,10 @@ export function Navigation() {
           >
             <img 
               src={nehorLogo} 
-              alt="NEHOR AI" 
-              className="h-12 w-auto filter invert dark:invert-0"
+              alt="NEHORAI" 
+              className="h-16 w-auto filter invert dark:invert-0"
             />
           </motion.div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-            {["home", "about", "portfolio", "contact"].map((item) => (
-              <button
-                key={item}
-                onClick={() => scrollToSection(item)}
-                className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors font-medium"
-              >
-                {t(`nav.${item}`)}
-              </button>
-            ))}
-          </div>
 
           {/* Controls */}
           <div className="flex items-center space-x-4 rtl:space-x-reverse">

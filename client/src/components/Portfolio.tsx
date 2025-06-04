@@ -18,11 +18,30 @@ export function Portfolio() {
       title: t("portfolio.realistic"),
       icon: Camera,
       color: "text-primary",
-      videos: Array(4).fill(0).map((_, i) => ({
-        id: i,
-        title: `Realistic Video ${i + 1}`,
-        description: "High-quality realistic AI video with stunning details"
-      }))
+      videos: [
+        {
+          id: 0,
+          title: "AI Portrait Animation",
+          description: "High-quality realistic AI video with stunning details",
+          youtubeId: "3Uv9I_ArckI"
+        },
+        {
+          id: 1,
+          title: "Realistic Character Motion",
+          description: "Advanced AI-generated realistic character movements",
+          youtubeId: "B-qw6dGhQUM"
+        },
+        {
+          id: 2,
+          title: "Realistic Video Sample 3",
+          description: "High-quality realistic AI video with stunning details"
+        },
+        {
+          id: 3,
+          title: "Realistic Video Sample 4",
+          description: "High-quality realistic AI video with stunning details"
+        }
+      ]
     },
     {
       id: "animation",
@@ -68,34 +87,69 @@ export function Portfolio() {
     }
   }
 
-  const VideoCard = ({ video, index }: { video: any, index: number }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      viewport={{ once: true }}
-      className="group cursor-pointer"
-      whileHover={{ scale: 1.05 }}
-    >
-      <div className="video-placeholder aspect-video rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800" />
-        <motion.div
-          className="relative z-10"
-          whileHover={{ scale: 1.2 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Play className="w-12 h-12 text-gray-400 group-hover:text-primary transition-colors" />
-        </motion.div>
-        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      </div>
-      <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-        {video.title}
-      </h4>
-      <p className="text-gray-600 dark:text-gray-300 text-sm">
-        {video.description}
-      </p>
-    </motion.div>
-  )
+  const VideoCard = ({ video, index }: { video: any, index: number }) => {
+    const handleVideoClick = () => {
+      if (video.youtubeId) {
+        window.open(`https://www.youtube.com/watch?v=${video.youtubeId}`, '_blank')
+      }
+    }
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: index * 0.1 }}
+        viewport={{ once: true }}
+        className="group cursor-pointer"
+        whileHover={{ scale: 1.05 }}
+        onClick={handleVideoClick}
+      >
+        <div className="aspect-video rounded-xl mb-4 relative overflow-hidden">
+          {video.youtubeId ? (
+            <div className="relative w-full h-full">
+              <img
+                src={`https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`}
+                alt={video.title}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Fallback to high quality thumbnail if maxres doesn't exist
+                  e.currentTarget.src = `https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`
+                }}
+              />
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <motion.div
+                className="absolute inset-0 flex items-center justify-center"
+                whileHover={{ scale: 1.2 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center opacity-90 group-hover:opacity-100 transition-opacity">
+                  <Play className="w-8 h-8 text-white ml-1" fill="white" />
+                </div>
+              </motion.div>
+            </div>
+          ) : (
+            <div className="video-placeholder w-full h-full flex items-center justify-center relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800" />
+              <motion.div
+                className="relative z-10"
+                whileHover={{ scale: 1.2 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Play className="w-12 h-12 text-gray-400 group-hover:text-primary transition-colors" />
+              </motion.div>
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </div>
+          )}
+        </div>
+        <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+          {video.title}
+        </h4>
+        <p className="text-gray-600 dark:text-gray-300 text-sm">
+          {video.description}
+        </p>
+      </motion.div>
+    )
+  }
 
   return (
     <section id="portfolio" className="py-20 section-bg-1 transition-colors duration-300">

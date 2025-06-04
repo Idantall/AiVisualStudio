@@ -46,11 +46,26 @@ export function Portfolio() {
       title: t("portfolio.animation"),
       icon: Wand2,
       color: "text-accent",
-      videos: Array(4).fill(0).map((_, i) => ({
-        id: i,
-        title: `Animation ${i + 1}`,
-        description: "Creative animation with dynamic characters and storytelling"
-      }))
+      videos: [
+        {
+          id: 0,
+          title: "Animation Style 1",
+          youtubeId: "8ZIl2y_b4wM"
+        },
+        {
+          id: 1,
+          title: "Animation Style 2",
+          youtubeId: "m4SgAK3xd-s"
+        },
+        {
+          id: 2,
+          title: "Animation Sample 3"
+        },
+        {
+          id: 3,
+          title: "Animation Sample 4"
+        }
+      ]
     },
     {
       id: "pixar",

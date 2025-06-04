@@ -232,6 +232,16 @@ export function Portfolio() {
           </motion.div>
         ))}
       </div>
+
+      {/* YouTube Modal */}
+      {modalVideo && (
+        <YouTubeModal
+          isOpen={true}
+          onClose={() => setModalVideo(null)}
+          videoId={modalVideo.videoId}
+          title={modalVideo.title}
+        />
+      )}
     </section>
   )
 }

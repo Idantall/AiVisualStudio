@@ -10,7 +10,7 @@ type LanguageProviderProps = {
 type LanguageProviderState = {
   language: Language
   setLanguage: (language: Language) => void
-  t: (key: string) => string
+  t: (key: string) => string | string[]
 }
 
 const initialState: LanguageProviderState = {
@@ -42,7 +42,7 @@ export function LanguageProvider({
       : "AI Video Studio - Artificial Intelligence Video Studio"
   }, [language])
 
-  const t = (key: string): string => {
+  const t = (key: string): string | string[] => {
     const keys = key.split('.')
     let value: any = translations[language]
     

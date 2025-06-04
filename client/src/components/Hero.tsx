@@ -94,7 +94,7 @@ export function Hero() {
             <br />
             <span className="text-3xl md:text-4xl font-semibold text-primary mt-4 block min-h-[1.2em]">
               {typewriterText}
-              <span className="animate-pulse text-accent">|</span>
+              <span className="typewriter-cursor text-accent">|</span>
             </span>
           </motion.h1>
 

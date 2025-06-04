@@ -160,6 +160,15 @@
     animation: glow 3s ease-in-out infinite;
   }
   
+  .typewriter-cursor {
+    animation: blink 1s infinite;
+  }
+  
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+  
   .whatsapp-glow {
     box-shadow: 0 8px 32px rgba(37, 211, 102, 0.3);
   }

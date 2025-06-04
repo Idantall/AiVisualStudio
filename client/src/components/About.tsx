@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { useLanguage } from "@/hooks/use-language"
-import { Brain, Palette, Rocket, User } from "lucide-react"
+import { Brain, Palette, Rocket } from "lucide-react"
+import spiderManImage from "@assets/68eef3cf-1615-41d1-940f-61cb2ac3656c.jpeg"
 
 export function About() {
   const { t } = useLanguage()
@@ -102,7 +103,7 @@ export function About() {
             {/* Profile image with 3D effect */}
             <div className="relative mx-auto w-80 h-80 rounded-3xl hover-3d overflow-hidden">
               <img 
-                src="/attached_assets/68eef3cf-1615-41d1-940f-61cb2ac3656c.jpeg"
+                src={spiderManImage}
                 alt="AI Video Specialist"
                 className="w-full h-full object-cover"
               />

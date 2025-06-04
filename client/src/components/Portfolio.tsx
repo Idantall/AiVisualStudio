@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import { useLanguage } from "@/hooks/use-language"
 import { Camera, Wand2, Heart, Play, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { YouTubeModal } from "./YouTubeModal"
 
 export function Portfolio() {
   const { t } = useLanguage()
@@ -11,6 +12,7 @@ export function Portfolio() {
     animation: 0,
     pixar: 0
   })
+  const [modalVideo, setModalVideo] = useState<{videoId: string, title: string} | null>(null)
 
   const videoSections = [
     {
@@ -101,7 +103,7 @@ export function Portfolio() {
   const VideoCard = ({ video, index }: { video: any, index: number }) => {
     const handleVideoClick = () => {
       if (video.youtubeId) {
-        window.open(`https://www.youtube.com/watch?v=${video.youtubeId}`, '_blank')
+        setModalVideo({ videoId: video.youtubeId, title: video.title })
       }
     }
 

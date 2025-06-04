@@ -7,11 +7,6 @@ import { YouTubeModal } from "./YouTubeModal"
 
 export function Portfolio() {
   const { t } = useLanguage()
-  const [currentSlides, setCurrentSlides] = useState<{[key: string]: number}>({
-    realistic: 0,
-    animation: 0,
-    pixar: 0
-  })
   const [modalVideo, setModalVideo] = useState<{videoId: string, title: string} | null>(null)
 
   const videoSections = [
@@ -99,25 +94,7 @@ export function Portfolio() {
     }
   ]
 
-  const nextSlide = (sectionId: string) => {
-    const section = videoSections.find(s => s.id === sectionId)
-    if (section) {
-      setCurrentSlides(prev => ({
-        ...prev,
-        [sectionId]: (prev[sectionId] + 1) % section.videos.length
-      }))
-    }
-  }
 
-  const prevSlide = (sectionId: string) => {
-    const section = videoSections.find(s => s.id === sectionId)
-    if (section) {
-      setCurrentSlides(prev => ({
-        ...prev,
-        [sectionId]: prev[sectionId] === 0 ? section.videos.length - 1 : prev[sectionId] - 1
-      }))
-    }
-  }
 
   const VideoCard = ({ video, index }: { video: any, index: number }) => {
     const handleVideoClick = () => {
@@ -204,42 +181,17 @@ export function Portfolio() {
             transition={{ duration: 0.6, delay: sectionIndex * 0.2 }}
             viewport={{ once: true }}
           >
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center">
+            <div className="mb-8">
+              <h3 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center mb-6">
                 <section.icon className={`w-8 h-8 ${section.color} mr-3 rtl:ml-3 rtl:mr-0`} />
                 {section.title}
               </h3>
-              
-              <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => nextSlide(section.id)}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  <ChevronRight className="w-4 h-4 rtl:rotate-180" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => prevSlide(section.id)}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  <ChevronLeft className="w-4 h-4 rtl:rotate-180" />
-                </Button>
-              </div>
             </div>
             
-            <div className="relative overflow-hidden">
-              <div 
-                className="flex space-x-6 rtl:space-x-reverse transition-transform duration-300 ease-out"
-                style={{
-                  transform: `translateX(calc(${-currentSlides[section.id] * 50}% - ${currentSlides[section.id] * 24}px))`
-                }}
-              >
-                {/* Create infinite loop by duplicating videos */}
-                {[...section.videos, ...section.videos].map((video, index) => (
-                  <div key={`${video.id}-${index}`} className="w-1/2 flex-shrink-0">
+            <div className="overflow-x-auto scrollbar-hide">
+              <div className="flex space-x-6 rtl:space-x-reverse pb-4">
+                {section.videos.map((video, index) => (
+                  <div key={video.id} className="w-80 flex-shrink-0">
                     <VideoCard video={video} index={index} />
                   </div>
                 ))}

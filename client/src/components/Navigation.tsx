@@ -33,7 +33,7 @@ export function Navigation() {
       animate={{ y: 0 }}
       className="fixed top-0 w-full z-50 glass-effect border-b border-white/20 dark:border-gray-700/20"
     >
-      <div className="container mx-auto px-6 py-1">
+      <div className="container mx-auto px-6 py-3">
         <div className="flex justify-between items-center">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
@@ -50,7 +50,7 @@ export function Navigation() {
 
           {/* Logo in top right */}
           <motion.div 
-            className="flex items-center cursor-pointer ml-4"
+            className="flex items-center cursor-pointer ml-9"
             whileHover={{ scale: 1.05 }}
             onClick={() => scrollToSection("home")}
           >

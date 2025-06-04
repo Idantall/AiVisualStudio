@@ -22,24 +22,20 @@ export function Portfolio() {
         {
           id: 0,
           title: "AI Portrait Animation",
-          description: "High-quality realistic AI video with stunning details",
           youtubeId: "3Uv9I_ArckI"
         },
         {
           id: 1,
           title: "Realistic Character Motion",
-          description: "Advanced AI-generated realistic character movements",
           youtubeId: "B-qw6dGhQUM"
         },
         {
           id: 2,
-          title: "Realistic Video Sample 3",
-          description: "High-quality realistic AI video with stunning details"
+          title: "Realistic Video Sample 3"
         },
         {
           id: 3,
-          title: "Realistic Video Sample 4",
-          description: "High-quality realistic AI video with stunning details"
+          title: "Realistic Video Sample 4"
         }
       ]
     },
@@ -59,11 +55,26 @@ export function Portfolio() {
       title: t("portfolio.pixar"),
       icon: Heart,
       color: "text-pink-500",
-      videos: Array(4).fill(0).map((_, i) => ({
-        id: i,
-        title: `Pixar Style ${i + 1}`,
-        description: "Charming Pixar-style video with lovable characters"
-      }))
+      videos: [
+        {
+          id: 0,
+          title: "Pixar Style Animation",
+          youtubeId: "WVHfTMU1lsk"
+        },
+        {
+          id: 1,
+          title: "Animated Character Story",
+          youtubeId: "J2v0Mlj0foQ"
+        },
+        {
+          id: 2,
+          title: "Pixar Style Sample 3"
+        },
+        {
+          id: 3,
+          title: "Pixar Style Sample 4"
+        }
+      ]
     }
   ]
 
@@ -141,12 +152,6 @@ export function Portfolio() {
             </div>
           )}
         </div>
-        <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-          {video.title}
-        </h4>
-        <p className="text-gray-600 dark:text-gray-300 text-sm">
-          {video.description}
-        </p>
       </motion.div>
     )
   }

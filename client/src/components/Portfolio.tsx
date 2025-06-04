@@ -102,19 +102,21 @@ export function Portfolio() {
   const nextSlide = (sectionId: string) => {
     const section = videoSections.find(s => s.id === sectionId)
     if (section) {
-      const maxSlide = Math.max(0, section.videos.length - 2)
       setCurrentSlides(prev => ({
         ...prev,
-        [sectionId]: Math.min(prev[sectionId] + 1, maxSlide)
+        [sectionId]: (prev[sectionId] + 1) % section.videos.length
       }))
     }
   }
 
   const prevSlide = (sectionId: string) => {
-    setCurrentSlides(prev => ({
-      ...prev,
-      [sectionId]: Math.max(prev[sectionId] - 1, 0)
-    }))
+    const section = videoSections.find(s => s.id === sectionId)
+    if (section) {
+      setCurrentSlides(prev => ({
+        ...prev,
+        [sectionId]: prev[sectionId] === 0 ? section.videos.length - 1 : prev[sectionId] - 1
+      }))
+    }
   }
 
   const VideoCard = ({ video, index }: { video: any, index: number }) => {
@@ -212,35 +214,36 @@ export function Portfolio() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => prevSlide(section.id)}
+                  onClick={() => nextSlide(section.id)}
                   className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronRight className="w-4 h-4 rtl:rotate-180" />
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => nextSlide(section.id)}
+                  onClick={() => prevSlide(section.id)}
                   className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronLeft className="w-4 h-4 rtl:rotate-180" />
                 </Button>
               </div>
             </div>
             
             <div className="relative overflow-hidden">
-              <motion.div 
-                className="flex space-x-6 rtl:space-x-reverse transition-transform duration-500 ease-in-out"
+              <div 
+                className="flex space-x-6 rtl:space-x-reverse transition-transform duration-300 ease-out"
                 style={{
-                  transform: `translateX(${currentSlides[section.id] * -50}%)`
+                  transform: `translateX(calc(${-currentSlides[section.id] * 50}% - ${currentSlides[section.id] * 24}px))`
                 }}
               >
-                {section.videos.map((video, index) => (
-                  <div key={video.id} className="w-1/2 flex-shrink-0">
+                {/* Create infinite loop by duplicating videos */}
+                {[...section.videos, ...section.videos].map((video, index) => (
+                  <div key={`${video.id}-${index}`} className="w-1/2 flex-shrink-0">
                     <VideoCard video={video} index={index} />
                   </div>
                 ))}
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         ))}

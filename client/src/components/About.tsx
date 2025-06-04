@@ -99,13 +99,15 @@ export function About() {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            {/* Profile image placeholder with 3D effect */}
-            <div className="relative mx-auto w-80 h-80 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl hover-3d overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
-                <User className="w-24 h-24 text-primary/50" />
-              </div>
+            {/* Profile image with 3D effect */}
+            <div className="relative mx-auto w-80 h-80 rounded-3xl hover-3d overflow-hidden">
+              <img 
+                src="/attached_assets/68eef3cf-1615-41d1-940f-61cb2ac3656c.jpeg"
+                alt="AI Video Specialist"
+                className="w-full h-full object-cover"
+              />
               <div className="absolute bottom-4 left-4 right-4 glass-effect p-4 rounded-xl">
-                <p className="text-sm text-center font-medium text-gray-900 dark:text-white">
+                <p className="text-sm text-center font-medium text-white">
                   AI Video Specialist
                 </p>
               </div>

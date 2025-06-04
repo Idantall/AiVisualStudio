@@ -7,8 +7,8 @@ export const translations = {
       contact: "צור קשר"
     },
     hero: {
-      title: "קסם וידאו AI",
-      subtitle: "מתעורר לחיים",
+      title: "פורצים את גבולות הדמיון עם AI",
+      subtitle: "",
       typewriter: [
         "סרטונים ריאליסטיים מדהימים",
         "אנימציות בסגנון פיקסאר",

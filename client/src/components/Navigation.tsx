@@ -50,7 +50,7 @@ export function Navigation() {
 
           {/* Logo in top right */}
           <motion.div 
-            className="flex items-center cursor-pointer"
+            className="flex items-center cursor-pointer ml-4"
             whileHover={{ scale: 1.05 }}
             onClick={() => scrollToSection("home")}
           >

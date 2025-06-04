@@ -102,21 +102,19 @@ export function Portfolio() {
   const nextSlide = (sectionId: string) => {
     const section = videoSections.find(s => s.id === sectionId)
     if (section) {
+      const maxSlide = Math.max(0, section.videos.length - 2)
       setCurrentSlides(prev => ({
         ...prev,
-        [sectionId]: (prev[sectionId] + 1) % Math.ceil(section.videos.length / 2)
+        [sectionId]: Math.min(prev[sectionId] + 1, maxSlide)
       }))
     }
   }
 
   const prevSlide = (sectionId: string) => {
-    const section = videoSections.find(s => s.id === sectionId)
-    if (section) {
-      setCurrentSlides(prev => ({
-        ...prev,
-        [sectionId]: prev[sectionId] === 0 ? Math.ceil(section.videos.length / 2) - 1 : prev[sectionId] - 1
-      }))
-    }
+    setCurrentSlides(prev => ({
+      ...prev,
+      [sectionId]: Math.max(prev[sectionId] - 1, 0)
+    }))
   }
 
   const VideoCard = ({ video, index }: { video: any, index: number }) => {
@@ -234,16 +232,12 @@ export function Portfolio() {
               <motion.div 
                 className="flex space-x-6 rtl:space-x-reverse transition-transform duration-500 ease-in-out"
                 style={{
-                  transform: `translateX(${currentSlides[section.id] * -100}%)`
+                  transform: `translateX(${currentSlides[section.id] * -50}%)`
                 }}
               >
-                {Array.from({ length: Math.ceil(section.videos.length / 2) }).map((_, slideIndex) => (
-                  <div key={slideIndex} className="flex space-x-6 rtl:space-x-reverse min-w-full">
-                    {section.videos.slice(slideIndex * 2, slideIndex * 2 + 2).map((video, index) => (
-                      <div key={video.id} className="flex-1">
-                        <VideoCard video={video} index={index} />
-                      </div>
-                    ))}
+                {section.videos.map((video, index) => (
+                  <div key={video.id} className="w-1/2 flex-shrink-0">
+                    <VideoCard video={video} index={index} />
                   </div>
                 ))}
               </motion.div>

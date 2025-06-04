@@ -20,7 +20,7 @@ export default function Home() {
       <Contact />
       
       {/* Footer */}
-      <footer className="bg-gray-900 dark:bg-black text-white py-12">
+      <footer className="section-bg-2 text-foreground py-12">
         <div className="container mx-auto px-6">
           <div className="text-center">
             <div className="text-3xl font-bold gradient-text mb-4">

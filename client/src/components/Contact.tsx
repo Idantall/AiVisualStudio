@@ -68,7 +68,7 @@ export function Contact() {
   ]
 
   return (
-    <section id="contact" className="py-20 bg-white dark:bg-gray-800 transition-colors duration-300">
+    <section id="contact" className="py-20 section-bg-3 transition-colors duration-300">
       <div className="container mx-auto px-6">
         <motion.div 
           className="text-center mb-16"
@@ -137,7 +137,7 @@ export function Contact() {
               <div>
                 <Input
                   type="text"
-                  placeholder={t("contact.name")}
+                  placeholder={t("contact.name") as string}
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
@@ -147,7 +147,7 @@ export function Contact() {
               <div>
                 <Input
                   type="email"
-                  placeholder={t("contact.email_address")}
+                  placeholder={t("contact.email_address") as string}
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
@@ -161,7 +161,7 @@ export function Contact() {
                   required
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t("contact.project_type")} />
+                    <SelectValue placeholder={t("contact.project_type") as string} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="realistic">{t("contact.realistic_option")}</SelectItem>
@@ -172,7 +172,7 @@ export function Contact() {
               </div>
               <div>
                 <Textarea
-                  placeholder={t("contact.message")}
+                  placeholder={t("contact.message") as string}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   required

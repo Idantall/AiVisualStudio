@@ -98,7 +98,7 @@ export function Portfolio() {
   )
 
   return (
-    <section id="portfolio" className="py-20 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <section id="portfolio" className="py-20 section-bg-1 transition-colors duration-300">
       <div className="container mx-auto px-6">
         <motion.div 
           className="text-center mb-16"

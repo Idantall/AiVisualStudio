@@ -1,9 +1,16 @@
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { useLanguage } from "@/hooks/use-language"
-import { Camera, Wand2, Heart, Play } from "lucide-react"
+import { Camera, Wand2, Heart, Play, ChevronLeft, ChevronRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export function Portfolio() {
   const { t } = useLanguage()
+  const [currentSlides, setCurrentSlides] = useState<{[key: string]: number}>({
+    realistic: 0,
+    animation: 0,
+    pixar: 0
+  })
 
   const videoSections = [
     {
@@ -41,13 +48,33 @@ export function Portfolio() {
     }
   ]
 
+  const nextSlide = (sectionId: string) => {
+    const section = videoSections.find(s => s.id === sectionId)
+    if (section) {
+      setCurrentSlides(prev => ({
+        ...prev,
+        [sectionId]: (prev[sectionId] + 1) % Math.ceil(section.videos.length / 2)
+      }))
+    }
+  }
+
+  const prevSlide = (sectionId: string) => {
+    const section = videoSections.find(s => s.id === sectionId)
+    if (section) {
+      setCurrentSlides(prev => ({
+        ...prev,
+        [sectionId]: prev[sectionId] === 0 ? Math.ceil(section.videos.length / 2) - 1 : prev[sectionId] - 1
+      }))
+    }
+  }
+
   const VideoCard = ({ video, index }: { video: any, index: number }) => (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
       viewport={{ once: true }}
-      className="flex-none w-80 group cursor-pointer"
+      className="group cursor-pointer"
       whileHover={{ scale: 1.05 }}
     >
       <div className="video-placeholder aspect-video rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
@@ -102,12 +129,44 @@ export function Portfolio() {
                 <section.icon className={`w-8 h-8 ${section.color} mr-3 rtl:ml-3 rtl:mr-0`} />
                 {section.title}
               </h3>
+              
+              <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => prevSlide(section.id)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => nextSlide(section.id)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
             
-            <div className="carousel-container flex space-x-6 rtl:space-x-reverse overflow-x-auto pb-4">
-              {section.videos.map((video, index) => (
-                <VideoCard key={video.id} video={video} index={index} />
-              ))}
+            <div className="relative overflow-hidden">
+              <motion.div 
+                className="flex space-x-6 rtl:space-x-reverse transition-transform duration-500 ease-in-out"
+                style={{
+                  transform: `translateX(${currentSlides[section.id] * -100}%)`
+                }}
+              >
+                {Array.from({ length: Math.ceil(section.videos.length / 2) }).map((_, slideIndex) => (
+                  <div key={slideIndex} className="flex space-x-6 rtl:space-x-reverse min-w-full">
+                    {section.videos.slice(slideIndex * 2, slideIndex * 2 + 2).map((video, index) => (
+                      <div key={video.id} className="flex-1">
+                        <VideoCard video={video} index={index} />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </motion.div>
             </div>
           </motion.div>
         ))}

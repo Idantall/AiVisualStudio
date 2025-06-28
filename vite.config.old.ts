@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@assets": path.resolve(__dirname, "./attached_assets"),
+      "@assets": path.resolve(__dirname, "../attached_assets"),
     },
   },
   build: {
@@ -17,11 +17,5 @@ export default defineConfig({
   server: {
     port: 5000,
     host: "0.0.0.0",
-    allowedHosts: [
-      "81c81d37-fba0-44e0-a4f9-2fbcfe266e27-00-4shy1xyso5is.janeway.replit.dev",
-      ".replit.dev",
-      "localhost",
-      "127.0.0.1"
-    ],
   },
 });

@@ -1,6 +1,6 @@
 // Bigfoot Academy — BJJ & MMA adult team promo (1080x1920, 2D motion graphics)
 // Deterministic: renderFrame(t) draws the frame at time t (seconds).
-const W = 1080, H = 1920, DUR = 25;
+const W = 1080, H = 1920, DUR = 28;
 // Brand palette: black & white only (accents are white, outline type, or grey)
 const GOLD = '#FFFFFF', GOLD2 = '#FFFFFF', GOLD3 = '#5A5A5A', BG = '#060606', PAPER = '#F2F1ED';
 const PHONE = '052-308-3330';
@@ -78,10 +78,12 @@ async function prep() {
   gg.putImageData(gd, 0, 0);
   A.grain = gr;
   A.bufA = mk(W, H); A.bufB = mk(W, H);
-  // photos, converted to high-contrast black & white to match the brand
+  // photos: coaches in original colour, the gym in high-contrast black & white
   const load = src => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
   const gray = (im, c = 1.15) => { const o = mk(im.width, im.height), q = o.getContext('2d'); q.filter = `grayscale(1) contrast(${c})`; q.drawImage(im, 0, 0); return o; };
-  [A.almog, A.geva, A.gym] = (await Promise.all(['assets/almog.jpg', 'assets/geva.jpg', 'assets/gym.jpg'].map(load))).map(im => gray(im));
+  [A.almog, A.geva, A.gym] = await Promise.all(['assets/almog.jpg', 'assets/geva.jpg', 'assets/gym.jpg'].map(load));
+  A.gym = gray(A.gym);
+  A.champs = await Promise.all([1, 2, 3, 4, 5].map(i => load(`assets/champ${i}.jpg`)));
 }
 function tint(src, color) {
   const key = (src === A.foot ? 'f' : 't') + color;
@@ -666,6 +668,64 @@ function SA(tau) {
   reveal('מאמן ראשי ומייסד · חגורה שחורה דאן 3', W / 2, 1530, { size: 52, w: 400, color: '#d6d6d6' }, prog(tau, .45, .85, E.outExpo));
 }
 
+// SCH: champions photo montage, local time tau (0–4s). Each photo slams onto the stack on a beat.
+const CHAMP_CARDS = [ // rotation, offset, focus point
+  { rot: -.07, dx: -40, dy: 10, fx: .5, fy: .45 },
+  { rot: .06, dx: 50, dy: -10, fx: .5, fy: .4 },
+  { rot: -.04, dx: -30, dy: 20, fx: .5, fy: .45 },
+  { rot: .08, dx: 40, dy: -15, fx: .5, fy: .45 },
+  { rot: -.02, dx: 0, dy: 0, fx: .5, fy: .35 },
+];
+const CHAMP_HITS = [0, .5, 1, 1.5, 2];
+function SCH(tau) {
+  bg(BG);
+  const g = ctx.createRadialGradient(W / 2, 900, 0, W / 2, 900, 1000);
+  g.addColorStop(0, 'rgba(255,255,255,.14)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(-W, -H, W * 3, H * 3);
+  ctx.save(); ctx.translate(W / 2, 900); ctx.rotate(tau * .2); ctx.fillStyle = 'rgba(255,255,255,.05)';
+  for (let i = 0; i < 14; i++) { ctx.rotate(Math.PI * 2 / 14); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-90, -1700); ctx.lineTo(90, -1700); ctx.fill(); }
+  ctx.restore();
+  const out = prog(tau, 3.7, 4.0, E.inCubic);
+  ctx.save();
+  ctx.translate(W / 2, 900); const z = 1 + tau * .015 + out * .4; ctx.scale(z, z); ctx.translate(-W / 2, -900);
+  reveal('מהמזרן שלנו – לפודיום', W / 2, 250, { size: 74, hl: '#fff', color: '#000' }, prog(tau, 0, .35, E.outExpo));
+  const cw = 680, ch = 900;
+  CHAMP_CARDS.forEach((c, i) => {
+    const h = CHAMP_HITS[i]; if (tau < h - .18) return;
+    const p = prog(tau, h - .18, h, E.inCubic);
+    const landedAfter = CHAMP_HITS.filter(x => x > h && tau >= x).length;
+    ctx.save();
+    ctx.translate(W / 2 + c.dx, 900 + c.dy); ctx.rotate(lerp(c.rot * 4, c.rot, p)); ctx.scale(lerp(1.7, 1, p), lerp(1.7, 1, p));
+    ctx.globalAlpha = clamp(p * 2);
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 60; ctx.fillStyle = '#fff';
+    ctx.fillRect(-cw / 2 - 18, -ch / 2 - 18, cw + 36, ch + 36); ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.rect(-cw / 2, -ch / 2, cw, ch); ctx.clip();
+    cover(A.champs[i], -cw / 2, -ch / 2, cw, ch, 1.04, c.fx, c.fy);
+    if (landedAfter) { ctx.fillStyle = `rgba(0,0,0,${Math.min(.5, .25 * landedAfter)})`; ctx.fillRect(-cw / 2, -ch / 2, cw, ch); }
+    ctx.restore();
+    ctx.restore();
+    ring(W / 2, 900, h, tau, 700, '#fff', 10, .5);
+    burst(W / 2, 900, h, tau, 26, 500 + i, '#fff', 1100, .7, 7);
+  });
+  ctx.restore();
+  // champion-names bands
+  const pm = prog(tau, .6, 1.0, E.outExpo);
+  if (pm > 0) {
+    ctx.save(); ctx.translate(0, (1 - pm) * 400 + out * 300);
+    ctx.save(); ctx.translate(W / 2, 1640); ctx.rotate(.05);
+    ctx.fillStyle = '#111'; ctx.fillRect(-W, -55, W * 2, 110);
+    marquee('CHAMPIONS • CHAMPIONS • CHAMPIONS • ', -tau * 180, { font: 'B', size: 74, ls: 8, stroke: '#fff', lw: 2 });
+    ctx.restore();
+    ctx.save(); ctx.translate(W / 2, 1635); ctx.rotate(-.06);
+    ctx.fillStyle = '#fff'; ctx.fillRect(-W, -62, W * 2, 124);
+    marquee(CHAMPS, tau * 260, { size: 60, w: 800, color: '#111' });
+    ctx.restore();
+    ctx.restore();
+  }
+  CHAMP_HITS.forEach(h => { const d = tau - h; if (d >= 0 && d < .12) full(`rgba(255,255,255,${.3 * (1 - d / .12)})`); });
+  full(`rgba(0,0,0,${out})`);
+}
+
 // ---------- compositor ----------
 function into(buf, fn) {
   const prev = ctx, pf = FRAME; ctx = buf.getContext('2d');
@@ -697,10 +757,11 @@ function whip(t, from, to, a, b) {
   }
   ctx.globalAlpha = 1;
 }
-// 25s TikTok cut: piecewise-linear map from video time to the story timeline the scenes are written in.
-// Story 13.35–18.8 (video 8.5–13.7) is replaced by the coach Almog and MMA/Geva scenes; the end card plays at 1x.
+// 28s TikTok cut: piecewise-linear map from video time to the story timeline the scenes are written in.
+// Video 8.5–13.7 is the coach Almog and MMA/Geva scenes, 16–20 the champions photo montage
+// (story 21.6–24.6 is skipped); the end card plays at 1x. Scene changes sit on the 120 bpm grid.
 const CUT = [ // [video, story]
-  [0, 0], [2.5, 3.8], [5.5, 8.2], [8.5, 13.35], [13.7, 18.8], [17.2, 24.15], [17.5, 24.6], [20.0, 28.2], [25.0, 33.2]];
+  [0, 0], [2.5, 3.8], [5.5, 8.2], [8.5, 13.35], [13.7, 18.8], [16.0, 21.6], [20.0, 24.6], [22.0, 28.2], [28.0, 34.2]];
 function storyTime(t) {
   for (let i = 1; i < CUT.length; i++) {
     const [v0, s0] = CUT[i - 1], [v1, s1] = CUT[i];
@@ -708,13 +769,13 @@ function storyTime(t) {
     if (t <= v1 || i === CUT.length - 1) return s0 + (t - v0) * (s1 - s0) / (v1 - v0);
   }
 }
-const ALMOG_AT = 9.0, MMA_AT = 10.5; // MMA hits 11.0–11.75, slam on the 12.0 downbeat
+const ALMOG_AT = 9.0, MMA_AT = 10.5, CHAMPS_AT = 16.0; // MMA slam on 12.0, photos land 16.0–18.0, logo on 22.0
 function renderFrame(t) {
   ctx = mainCtx; FRAME = new DOMMatrix();
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   const st = storyTime(t);
-  const s = shake(st);
+  const s = t >= CHAMPS_AT && t < 20.0 ? { x: 0, y: 0 } : shake(st);
   ctx.save(); ctx.translate(s.x, s.y);
   if (t < 8.5) safe(() => t < 2.5 ? S1(st) : t < 5.5 ? S2(st) : S3(st));
   else if (t < ALMOG_AT) { // slat wipe belts → Almog
@@ -725,8 +786,9 @@ function renderFrame(t) {
   else if (t < 10.6) whip(t, () => SA(t - ALMOG_AT), () => SM(t - MMA_AT), 10.35, 10.6);
   else if (t < 13.45) safe(() => SM(t - MMA_AT));
   else if (t < 13.7) whip(t, () => SM(t - MMA_AT), () => S5(18.8), 13.45, 13.7);
-  else if (t < 17.5) safe(() => S5(st));
-  else if (t < 20.0) safe(() => S6(st));
+  else if (t < CHAMPS_AT) safe(() => S5(st));
+  else if (t < 20.0) safe(() => SCH(t - CHAMPS_AT));
+  else if (t < 22.0) safe(() => S6(st));
   else safe(() => S7(st));
   ctx.restore();
   // vignette + grain

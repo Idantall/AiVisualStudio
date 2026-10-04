@@ -1,7 +1,8 @@
 // Bigfoot Academy — BJJ & MMA adult team promo (1080x1920, 2D motion graphics)
 // Deterministic: renderFrame(t) draws the frame at time t (seconds).
 const W = 1080, H = 1920, DUR = 35;
-const GOLD = '#D9A93F', GOLD2 = '#F6D98A', GOLD3 = '#8A6420', BG = '#060606', PAPER = '#F2F1ED';
+// Brand palette: black & white only (accents are white, outline type, or grey)
+const GOLD = '#FFFFFF', GOLD2 = '#FFFFFF', GOLD3 = '#5A5A5A', BG = '#060606', PAPER = '#F2F1ED';
 const PHONE = '052-331-9676';
 
 const main = document.getElementById('c');
@@ -194,7 +195,7 @@ function S1(t) {
   const out = prog(t, 2.95, 3.35, E.inCubic);
   reveal('כל אלוף', W / 2, 300, { size: 170 }, prog(t, .55, 1.05, E.outExpo), out);
   reveal('התחיל', W / 2, 480, { size: 170 }, prog(t, 1.15, 1.65, E.outExpo), out);
-  reveal('בצעד הראשון.', W / 2, 650, { size: 130, color: GOLD }, prog(t, 1.75, 2.25, E.outExpo), out);
+  reveal('בצעד הראשון.', W / 2, 650, { size: 130, stroke: '#fff', lw: 3.5 }, prog(t, 1.75, 2.25, E.outExpo), out);
   // iris into white
   circle(W / 2 - 95, 1150, prog(t, 3.25, 3.8, E.inExpo) * 2300, PAPER);
 }
@@ -213,7 +214,7 @@ function S2(t) {
   const pA = prog(t, 4.75, 5.1, E.outBack);
   if (pA > 0) {
     ctx.save(); ctx.translate(W / 2, 735); ctx.rotate((1 - pA) * -1.2); ctx.translate(-W / 2, -735);
-    T('&', W / 2, 735, { font: 'B', size: 160, color: GOLD, scale: pA });
+    T('&', W / 2, 735, { font: 'B', size: 160, color: '#0a0a0a', scale: pA });
     ctx.restore();
   }
   // diagonal band
@@ -222,7 +223,7 @@ function S2(t) {
     ctx.save(); ctx.translate(lerp(W * 1.4, 0, pBand), 0);
     ctx.translate(W / 2, 1270); ctx.rotate(-.085);
     ctx.fillStyle = '#0a0a0a'; ctx.fillRect(-W, -100, W * 2, 200);
-    ctx.fillStyle = GOLD; ctx.fillRect(-W, -100, W * 2, 8); ctx.fillRect(-W, 92, W * 2, 8);
+    ctx.fillStyle = PAPER; ctx.fillRect(-W, -84, W * 2, 4); ctx.fillRect(-W, 80, W * 2, 4);
     T('קבוצת בוגרים', 0, 4, { size: 118 });
     ctx.restore();
   }
@@ -231,7 +232,7 @@ function S2(t) {
   if (p17 > 0) {
     const echo = prog(t, 5.95, 6.9, E.outCubic);
     T('17+', W / 2, 1585, { font: 'B', size: 380, stroke: '#0a0a0a', lw: 3, alpha: .25 * (1 - echo), scale: 1 + echo * .5 });
-    T('17+', W / 2, 1585, { font: 'B', size: 380, color: GOLD, scale: p17, alpha: clamp(p17 * 2) });
+    T('17+', W / 2, 1585, { font: 'B', size: 380, color: '#0a0a0a', scale: p17, alpha: clamp(p17 * 2) });
   }
   reveal('לגילאי 17 ומעלה', W / 2, 1790, { size: 64, w: 800, color: '#1a1a1a' }, prog(t, 6.3, 6.7, E.outExpo));
   circle(W / 2, 1585, prog(t, 7.6, 8.2, E.inExpo) * 2400, BG);
@@ -268,27 +269,27 @@ function S3(t) {
   let k = 0; BELTS.forEach((b, i) => { if (t >= b.t) k = i; });
   const cur = BELTS[k];
   const g = ctx.createRadialGradient(W / 2, 960, 0, W / 2, 960, 900);
-  const gc = k === 4 ? 'rgba(217,169,63,.22)' : hexA(cur.c, .18);
+  const gc = k === 4 ? 'rgba(255,255,255,.14)' : hexA(cur.c, .18);
   g.addColorStop(0, gc); g.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
   const swap = prog(t, 11.95, 12.3, E.inOutCubic);
   reveal('מהחגורה הלבנה', W / 2, 400, { size: 120 }, prog(t, 8.35, 8.85, E.outExpo), swap);
-  reveal('עד החגורה השחורה', W / 2, 400, { size: 120, color: GOLD }, prog(t, 12.2, 12.7, E.outExpo));
+  reveal('עד החגורה השחורה', W / 2, 400, { size: 108, stroke: '#fff', lw: 3.5 }, prog(t, 12.2, 12.7, E.outExpo));
 
   // belt
   const bw = 860, bh = 124, x0 = (W - bw) / 2, by = 960 + Math.sin(t * 2.2) * 6;
   let pop = 0; BELTS.forEach(b => { const d = t - b.t; if (d >= 0 && d < .6) pop += .06 * Math.exp(-d * 7) * Math.sin(d * 18 + 1.6); });
   ctx.save();
   ctx.translate(W / 2, by); ctx.scale(prog(t, 8.5, 8.95, E.outExpo) * (1 + pop), 1 + pop); ctx.translate(-W / 2, -by);
-  if (k === 4) { ctx.save(); ctx.shadowColor = 'rgba(217,169,63,.8)'; ctx.shadowBlur = 50 * prog(t, 12.1, 12.6); rrect(x0, by - bh / 2, bw, bh, 16); ctx.fillStyle = '#141414'; ctx.fill(); ctx.restore(); }
+  if (k === 4) { ctx.save(); ctx.shadowColor = 'rgba(255,255,255,.55)'; ctx.shadowBlur = 50 * prog(t, 12.1, 12.6); rrect(x0, by - bh / 2, bw, bh, 16); ctx.fillStyle = '#141414'; ctx.fill(); ctx.restore(); }
   BELTS.forEach((b, i) => {
     if (t < b.t) return;
     const w = i === 0 ? 1 : prog(t, b.t, b.t + .42, E.inOutCubic);
     ctx.save();
     ctx.beginPath(); ctx.rect(x0 + bw * (1 - w) - 2, by - bh, bw * w + 4, bh * 2); ctx.clip(); // wipe right → left
     drawBelt(x0, by - bh / 2, bw, bh, b, i === 4 ? 3 : Math.min(4, Math.floor(prog(t, b.t + .3, b.t + .75) * 5)));
-    if (i === 4) { ctx.strokeStyle = 'rgba(246,217,138,.7)'; ctx.lineWidth = 3; rrect(x0, by - bh / 2, bw, bh, 16); ctx.stroke(); }
+    if (i === 4) { ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.lineWidth = 3; rrect(x0, by - bh / 2, bw, bh, 16); ctx.stroke(); }
     ctx.restore();
     // sheen
     const s = prog(t, b.t + .25, b.t + .85, E.inOutCubic);
@@ -364,7 +365,7 @@ function S4(t) {
   for (let x = -H; x < W + H; x += 140) { ctx.beginPath(); ctx.moveTo(x + off, 0); ctx.lineTo(x + off - H * .58, H); ctx.stroke(); }
   ctx.restore();
   const pt = prog(t, 13.95, 14.4, E.outCubic);
-  T('THE COACHES', W / 2, 225 + (1 - pt) * 30, { font: 'B', size: 56, ls: 14, color: GOLD, alpha: pt });
+  T('THE COACHES', W / 2, 225 + (1 - pt) * 30, { font: 'B', size: 56, ls: 14, color: '#8d8d8d', alpha: pt });
   reveal('המאמנים שלנו', W / 2, 330, { size: 116 }, prog(t, 14.05, 14.55, E.outExpo));
   coachCard(470, lerp(W, 0, prog(t, 14.3, 14.95, E.outExpo)),
     { name: 'אלמוג בריטש', role: "מאמן ראשי ומייסד · ג'יו ג'יטסו ברזילאי", rank: 'חגורה שחורה דאן 3', tag: 'BJJ', belt: '#151515', bar: '#C8102E', stripes: 3 }, t, 14.3);
@@ -391,7 +392,7 @@ const CHAMPS = 'עידן אטלי • ארז מלכה • נאור מלכה • 
 function S5(t) {
   bg(BG);
   const g = ctx.createRadialGradient(W / 2, 700, 0, W / 2, 700, 1100);
-  g.addColorStop(0, 'rgba(217,169,63,.28)'); g.addColorStop(.5, 'rgba(217,169,63,.06)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  g.addColorStop(0, 'rgba(255,255,255,.16)'); g.addColorStop(.5, 'rgba(255,255,255,.04)'); g.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   const zoomOut = prog(t, 24.15, 24.6, E.inCubic);
   ctx.save();
@@ -400,7 +401,7 @@ function S5(t) {
   // rays
   const pr = prog(t, 19.4, 20.0);
   if (pr > 0) {
-    ctx.save(); ctx.translate(mx, my); ctx.rotate(t * .25); ctx.fillStyle = `rgba(246,217,138,${.07 * pr})`;
+    ctx.save(); ctx.translate(mx, my); ctx.rotate(t * .25); ctx.fillStyle = `rgba(255,255,255,${.07 * pr})`;
     for (let i = 0; i < 14; i++) { ctx.rotate(Math.PI * 2 / 14); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-60, -1100); ctx.lineTo(60, -1100); ctx.fill(); }
     ctx.restore();
   }
@@ -419,14 +420,14 @@ function S5(t) {
   const pf = prog(t, 19.45, 19.8, E.outCubic);
   if (pf > 0) {
     const mg = ctx.createRadialGradient(mx - 70, my - 80, 20, mx, my, r);
-    mg.addColorStop(0, GOLD2); mg.addColorStop(.55, GOLD); mg.addColorStop(1, GOLD3);
-    ctx.save(); ctx.globalAlpha = pf; ctx.shadowColor = 'rgba(217,169,63,.7)'; ctx.shadowBlur = 70; circle(mx, my, r, mg); ctx.restore();
+    mg.addColorStop(0, '#FFFFFF'); mg.addColorStop(.55, '#D2D2D2'); mg.addColorStop(1, '#6A6A6A');
+    ctx.save(); ctx.globalAlpha = pf; ctx.shadowColor = 'rgba(255,255,255,.35)'; ctx.shadowBlur = 70; circle(mx, my, r, mg); ctx.restore();
     ctx.save(); ctx.globalAlpha = pf; ctx.strokeStyle = GOLD3; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(mx, my, r - 34, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
   }
   const pa = prog(t, 19.1, 19.6, E.inOutCubic);
   if (pa > 0) { ctx.strokeStyle = GOLD2; ctx.lineWidth = 14; ctx.beginPath(); ctx.arc(mx, my, r, -Math.PI / 2, -Math.PI / 2 + pa * Math.PI * 2); ctx.stroke(); }
   const pFoot = prog(t, 19.65, 20.05, E.outBack);
-  if (pFoot > 0) foot(mx, my + 4, 250 * pFoot, { color: '#2c1f07', alpha: clamp(pFoot * 2) });
+  if (pFoot > 0) foot(mx, my + 4, 250 * pFoot, { color: '#111', alpha: clamp(pFoot * 2) });
   // shine
   const sh = ((t - 20) % 2.2) / .7;
   if (t > 20 && sh < 1) {
@@ -440,10 +441,10 @@ function S5(t) {
   }
   ctx.restore();
   reveal('האלופים שלנו', W / 2, 1060, { size: 124 }, prog(t, 19.8, 20.3, E.outExpo));
-  [['אלוף ישראל', 20.3, '#fff'], ['אלוף אירופה', 20.7, '#fff'], ['אלוף עולם', 21.1, GOLD2]].forEach(([s, h, c], i) => {
+  [['אלוף ישראל', 20.3, '#fff'], ['אלוף אירופה', 20.7, '#fff'], ['אלוף עולם', 21.1, 'outline']].forEach(([s, h, c], i) => {
     const p = prog(t, h - .12, h + .15, E.outExpo);
     if (p <= 0) return;
-    T(s, W / 2, 1225 + i * 118, { size: 94, color: c, scale: lerp(1.7, 1, p), alpha: clamp(p * 1.4) });
+    T(s, W / 2, 1225 + i * 118, { size: 94, ...(c === 'outline' ? { stroke: '#fff', lw: 3 } : { color: c }), scale: lerp(1.7, 1, p), alpha: clamp(p * 1.4) });
   });
   ring(W / 2, 1461, 21.1, t, 600, GOLD2, 10);
   ctx.restore();
@@ -451,7 +452,7 @@ function S5(t) {
   if (t > 20.3) {
     const R = rng(99);
     for (let i = 0; i < 90; i++) {
-      const t0 = 20.3 + R() * 1.4, x = R() * W, sp = 380 + R() * 420, rot = R() * 6, w = 10 + R() * 10, col = R() < .7 ? GOLD : '#fff';
+      const t0 = 20.3 + R() * 1.4, x = R() * W, sp = 380 + R() * 420, rot = R() * 6, w = 10 + R() * 10, col = R() < .6 ? '#fff' : '#7a7a7a';
       const d = t - t0; if (d < 0) continue;
       const y = -40 + d * sp, xx = x + Math.sin(d * 3 + i) * 40;
       if (y > H + 40) continue;
@@ -490,7 +491,7 @@ function S6(t) {
   ctx.save(); ctx.globalAlpha = 1 - out;
   ctx.translate(W / 2, 1000); ctx.scale(1 - out * .08, 1 - out * .08); ctx.translate(-W / 2, -1000);
   reveal('האלוף הבא', W / 2, 800, { size: 176 }, prog(t, 24.8, 25.3, E.outExpo));
-  reveal('מתחיל כאן.', W / 2, 990, { size: 176, color: GOLD }, prog(t, 25.3, 25.8, E.outExpo));
+  reveal('מתחיל כאן.', W / 2, 990, { size: 176, stroke: '#fff', lw: 4.5 }, prog(t, 25.3, 25.8, E.outExpo));
   const pl = prog(t, 25.75, 26.2, E.inOutCubic);
   ctx.fillStyle = GOLD; ctx.fillRect(W / 2 - 260 * pl, 1110, 520 * pl, 6);
   reveal('הצטרפו לקבוצת הבוגרים', W / 2, 1210, { size: 68, w: 800 }, prog(t, 26.0, 26.4, E.outExpo));
@@ -530,7 +531,7 @@ function S7(t) {
   // embers
   const R = rng(31);
   for (let i = 0; i < 46; i++) {
-    const x = R() * W, sp = 30 + R() * 70, ph = R() * H, s = 2 + R() * 4, c = R() < .5 ? GOLD2 : '#fff';
+    const x = R() * W, sp = 30 + R() * 70, ph = R() * H, s = 2 + R() * 4, c = R() < .5 ? '#8a8a8a' : '#fff';
     const y = H - ((ph + (t - 28.2) * sp) % H);
     ctx.globalAlpha = .12 + .25 * Math.abs(Math.sin(t * 1.3 + i)); ctx.fillStyle = c; ctx.fillRect(x + Math.sin(t + i) * 12, y, s, s);
   }
@@ -565,7 +566,7 @@ function S7(t) {
     if (t > 31.2 && s < 1) {
       ctx.save(); rrect(-390, -68, 780, 136, 68); ctx.clip();
       const sx = lerp(-520, 520, s); const sg = ctx.createLinearGradient(sx - 90, 0, sx + 90, 0);
-      sg.addColorStop(0, 'rgba(217,169,63,0)'); sg.addColorStop(.5, 'rgba(217,169,63,.45)'); sg.addColorStop(1, 'rgba(217,169,63,0)');
+      sg.addColorStop(0, 'rgba(0,0,0,0)'); sg.addColorStop(.5, 'rgba(0,0,0,.16)'); sg.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = sg; ctx.fillRect(-400, -80, 800, 160); ctx.restore();
     }
     T('לאימון ניסיון בוואטסאפ', 0, 3, { size: 62, color: '#000' });
@@ -604,7 +605,7 @@ function slats(t, from, to, t0) {
     if (x > 0) ctx.drawImage(A.bufA, 0, y, x, sh, 0, y, x, sh);
     const nx = Math.max(0, x + W);
     if (nx < W) ctx.drawImage(A.bufB, nx, y, W - nx, sh, nx, y, W - nx, sh);
-    ctx.fillStyle = i % 2 ? PAPER : GOLD; ctx.fillRect(x, y, W, sh + 1);
+    ctx.fillStyle = i % 2 ? PAPER : '#1c1c1c'; ctx.fillRect(x, y, W, sh + 1);
   }
 }
 function whip(t, from, to, a, b) {

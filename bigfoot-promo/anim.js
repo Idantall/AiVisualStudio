@@ -78,6 +78,10 @@ async function prep() {
   gg.putImageData(gd, 0, 0);
   A.grain = gr;
   A.bufA = mk(W, H); A.bufB = mk(W, H);
+  // photos, converted to high-contrast black & white to match the brand
+  const load = src => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
+  const gray = (im, c = 1.15) => { const o = mk(im.width, im.height), q = o.getContext('2d'); q.filter = `grayscale(1) contrast(${c})`; q.drawImage(im, 0, 0); return o; };
+  [A.almog, A.geva, A.gym] = (await Promise.all(['assets/almog.jpg', 'assets/geva.jpg', 'assets/gym.jpg'].map(load))).map(im => gray(im));
 }
 function tint(src, color) {
   const key = (src === A.foot ? 'f' : 't') + color;
@@ -100,6 +104,22 @@ function safe(fn) {
 }
 function full(color) { ctx.save(); ctx.setTransform(FRAME); ctx.fillStyle = color; ctx.fillRect(-120, -120, W + 240, H + 240); ctx.restore(); }
 function bg(color) { full(color); }
+// cover-fit an image into a box, keeping the focus point (fx, fy) in view
+function cover(img, x, y, w, h, zoom = 1, fx = .5, fy = .5) {
+  const s = Math.max(w / img.width, h / img.height) * zoom, dw = img.width * s, dh = img.height * s;
+  ctx.drawImage(img, clamp(x + w / 2 - fx * dw, x + w - dw, x), clamp(y + h / 2 - fy * dh, y + h - dh, y), dw, dh);
+}
+function fullPhoto(img, zoom, fx, fy) { ctx.save(); ctx.setTransform(FRAME); cover(img, -40, -40, W + 80, H + 80, zoom, fx, fy); ctx.restore(); }
+// photo in a white-framed card that wipes up into place (p: 0→1)
+function photoCard(img, x, y, w, h, p, zoom = 1, fx = .5, fy = .5) {
+  if (p <= 0) return;
+  ctx.save();
+  ctx.translate(0, (1 - p) * 80); ctx.globalAlpha *= clamp(p * 1.4);
+  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 50; rrect(x, y + h * (1 - p), w, h * p, 18); ctx.fillStyle = '#000'; ctx.fill(); ctx.restore();
+  ctx.save(); rrect(x, y + h * (1 - p), w, h * p, 18); ctx.clip(); cover(img, x, y, w, h, zoom, fx, fy); ctx.restore();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 6; rrect(x, y + h * (1 - p), w, h * p, 18); ctx.stroke();
+  ctx.restore();
+}
 function foot(x, y, h, o = {}) {
   const img = tint(A.foot, o.color || '#fff');
   const w = h * img.width / img.height;
@@ -218,7 +238,8 @@ function S1(t) {
 // S2 3.8–8.2: BJJ & MMA / adult team / 17+
 function S2(t) {
   bg(PAPER);
-  foot(W / 2 + 220, 980, 1700, { color: '#000', alpha: .045, rot: .32 + t * .02 });
+  fullPhoto(A.gym, 1.04 + prog(t, 3.8, 8.2) * .12, .6, .5);
+  full('rgba(242,241,237,.6)');
   // BJJ from left, MMA from right
   const pB = prog(t, 3.85, 4.15, E.outExpo), pM = prog(t, 4.35, 4.65, E.outExpo);
   const xb = lerp(-700, W / 2, pB), xm = lerp(W + 700, W / 2, pM);
@@ -587,6 +608,10 @@ function SM(tau) {
     ctx.beginPath(); ctx.moveTo(x, -600); ctx.lineTo(x - H - 1200, H + 600); ctx.stroke();
   }
   ctx.restore();
+  const shrink = prog(tau, 1.75, 2.1, E.inOutCubic);
+  reveal('אומנויות לחימה משולבות', W / 2, 300, { size: 70, w: 800 }, prog(tau, .05, .45, E.outExpo), shrink);
+  ctx.save();
+  ctx.translate(W / 2, cy - 440 * shrink); ctx.scale(1 - .45 * shrink, 1 - .45 * shrink); ctx.translate(-W / 2, -cy);
   const g = ctx.createRadialGradient(W / 2, cy, 0, W / 2, cy, 700);
   g.addColorStop(0, 'rgba(255,255,255,.10)'); g.addColorStop(1, 'rgba(255,255,255,0)');
   ctx.fillStyle = g; ctx.fillRect(-W, -H, W * 3, H * 3);
@@ -597,7 +622,6 @@ function SM(tau) {
     ctx.shadowBlur = 0; ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 3; octagon(W / 2, cy, r - 38, po);
     ctx.restore();
   }
-  reveal('אומנויות לחימה משולבות', W / 2, 300, { size: 70, w: 800 }, prog(tau, .05, .45, E.outExpo));
   // impact lines on each hit
   MMA_HITS.forEach((h, i) => {
     const d = tau - h; if (d < 0 || d > .3) return;
@@ -619,10 +643,27 @@ function SM(tau) {
   const pm = prog(tau, 1.42, 1.58, E.outExpo);
   if (pm > 0) T('MMA', W / 2, cy + 12, { font: 'B', size: 330, scale: lerp(2.2, 1, pm), alpha: clamp(pm * 1.5) });
   burst(W / 2, cy, 1.5, tau, 50, 321, '#fff', 1400, 1, 8);
-  reveal('בהדרכת גבע בריטש', W / 2, 1480, { size: 74, w: 900, hl: '#fff', color: '#000' }, prog(tau, 1.7, 2.05, E.outExpo));
-  reveal('מאמן MMA · חגורה חומה ב-BJJ', W / 2, 1590, { size: 50, w: 400, color: '#cfcfcf' }, prog(tau, 1.85, 2.2, E.outExpo));
+  ctx.restore();
+  photoCard(A.geva, 240, 790, 600, 700, prog(tau, 1.85, 2.3, E.outExpo), 1.1 - .08 * prog(tau, 1.85, 3), .5, .35);
+  reveal('גבע בריטש', W / 2, 1590, { size: 92, hl: '#fff', color: '#000' }, prog(tau, 2.05, 2.4, E.outExpo));
+  reveal('מאמן MMA · חגורה חומה ב-BJJ', W / 2, 1700, { size: 52, w: 400, color: '#d6d6d6' }, prog(tau, 2.2, 2.55, E.outExpo));
   ctx.restore();
   MMA_HITS.forEach((h, i) => { const d = tau - h; if (d >= 0 && d < .15) full(`rgba(255,255,255,${(i === 4 ? .5 : .16) * (1 - d / .15)})`); });
+}
+
+// SA: head coach Almog Britch, local time tau (0–1.4s, plus the slat wipe before it)
+function SA(tau) {
+  bg(BG);
+  const g = ctx.createRadialGradient(W / 2, 760, 0, W / 2, 760, 900);
+  g.addColorStop(0, 'rgba(255,255,255,.09)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(-W, -H, W * 3, H * 3);
+  const pt = prog(tau, -.1, .3, E.outCubic);
+  T('HEAD COACH  •  BJJ', W / 2, 205 + (1 - pt) * 30, { font: 'B', size: 56, ls: 14, color: '#b8b8b8', alpha: pt });
+  photoCard(A.almog, 140, 270, 800, 960, prog(tau, -.3, .3, E.outExpo), 1.12 - .1 * prog(tau, -.3, 1.6), .48, .4);
+  const pb = prog(tau, .2, .55, E.inOutCubic); // his black belt (3 stripes) wipes across the bottom of the photo
+  if (pb > 0) { ctx.save(); ctx.beginPath(); ctx.rect(982 - 884 * pb, 1180, 884 * pb + 4, 130); ctx.clip(); drawBelt(100, 1200, 880, 76, BELTS[4], 3); ctx.restore(); }
+  reveal('אלמוג בריטש', W / 2, 1410, { size: 100, hl: '#fff', color: '#000' }, prog(tau, .3, .7, E.outExpo));
+  reveal('מאמן ראשי ומייסד · חגורה שחורה דאן 3', W / 2, 1530, { size: 52, w: 400, color: '#d6d6d6' }, prog(tau, .45, .85, E.outExpo));
 }
 
 // ---------- compositor ----------
@@ -657,10 +698,9 @@ function whip(t, from, to, a, b) {
   ctx.globalAlpha = 1;
 }
 // 25s TikTok cut: piecewise-linear map from video time to the story timeline the scenes are written in.
-// Scene changes sit on the soundtrack's 120 bpm grid. Story 13.35–18.8 (video 9.5–12.8) is replaced by
-// the MMA scene; the end card plays at 1x.
+// Story 13.35–18.8 (video 8.5–13.7) is replaced by the coach Almog and MMA/Geva scenes; the end card plays at 1x.
 const CUT = [ // [video, story]
-  [0, 0], [3.0, 3.8], [6.0, 8.2], [9.5, 13.35], [12.8, 18.8], [16.7, 24.15], [17.0, 24.6], [19.5, 28.2], [25.0, 33.7]];
+  [0, 0], [2.5, 3.8], [5.5, 8.2], [8.5, 13.35], [13.7, 18.8], [17.2, 24.15], [17.5, 24.6], [20.0, 28.2], [25.0, 33.2]];
 function storyTime(t) {
   for (let i = 1; i < CUT.length; i++) {
     const [v0, s0] = CUT[i - 1], [v1, s1] = CUT[i];
@@ -668,7 +708,7 @@ function storyTime(t) {
     if (t <= v1 || i === CUT.length - 1) return s0 + (t - v0) * (s1 - s0) / (v1 - v0);
   }
 }
-const MMA_AT = 10.0;
+const ALMOG_AT = 9.0, MMA_AT = 10.5; // MMA hits 11.0–11.75, slam on the 12.0 downbeat
 function renderFrame(t) {
   ctx = mainCtx; FRAME = new DOMMatrix();
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
@@ -676,15 +716,17 @@ function renderFrame(t) {
   const st = storyTime(t);
   const s = shake(st);
   ctx.save(); ctx.translate(s.x, s.y);
-  if (t < 9.5) safe(() => t < 3.0 ? S1(st) : t < 6.0 ? S2(st) : S3(st));
-  else if (t < MMA_AT) { // slat wipe belts → MMA
-    const tau = 13.35 + (t - 9.5) * 2;
-    slats(tau, () => S3(Math.min(tau, 13.8)), () => SM(t - MMA_AT), 13.35);
+  if (t < 8.5) safe(() => t < 2.5 ? S1(st) : t < 5.5 ? S2(st) : S3(st));
+  else if (t < ALMOG_AT) { // slat wipe belts → Almog
+    const tau = 13.35 + (t - 8.5) * 2;
+    slats(tau, () => S3(Math.min(tau, 13.8)), () => SA(t - ALMOG_AT), 13.35);
   }
-  else if (t < 12.5) safe(() => SM(t - MMA_AT));
-  else if (t < 12.8) whip(t, () => SM(t - MMA_AT), () => S5(18.8), 12.5, 12.8);
-  else if (t < 17.0) safe(() => S5(st));
-  else if (t < 19.5) safe(() => S6(st));
+  else if (t < 10.35) safe(() => SA(t - ALMOG_AT));
+  else if (t < 10.6) whip(t, () => SA(t - ALMOG_AT), () => SM(t - MMA_AT), 10.35, 10.6);
+  else if (t < 13.45) safe(() => SM(t - MMA_AT));
+  else if (t < 13.7) whip(t, () => SM(t - MMA_AT), () => S5(18.8), 13.45, 13.7);
+  else if (t < 17.5) safe(() => S5(st));
+  else if (t < 20.0) safe(() => S6(st));
   else safe(() => S7(st));
   ctx.restore();
   // vignette + grain

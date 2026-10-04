@@ -14,7 +14,7 @@ const mf = m => 440 * Math.pow(2, (m - 69) / 12);
 const saw = ph => (ph / Math.PI) % 2 - 1;
 
 // Story-time → video-time map (same table as anim.js), for effects tied to scene animations.
-const CUT = [[0, 0], [3.0, 3.8], [6.0, 8.2], [9.5, 13.35], [12.8, 18.8], [16.7, 24.15], [17.0, 24.6], [19.5, 28.2], [25.0, 33.7]];
+const CUT = [[0, 0], [2.5, 3.8], [5.5, 8.2], [8.5, 13.35], [13.7, 18.8], [17.2, 24.15], [17.5, 24.6], [20.0, 28.2], [25.0, 33.2]];
 function M(st) {
   for (let i = 1; i < CUT.length; i++) {
     const [v0, s0] = CUT[i - 1], [v1, s1] = CUT[i];
@@ -129,7 +129,7 @@ const bassNote = (t0, m, len, g = .5) => {
 };
 
 // ---------- the track ----------
-const BEAT = .5, BAR = 2, G0 = 1.5; // downbeats at 1.5, 3.5, 5.5 …
+const BEAT = .5, BAR = 2; // downbeats on every even second
 const CH = { // [pad/arp voicing], bass root
   Am: [[57, 60, 64], 33], F: [[57, 60, 65], 29], C: [[55, 60, 64], 36], G: [[55, 59, 62], 31], E: [[56, 59, 64], 28],
 };
@@ -168,53 +168,58 @@ function drums(t0, beats, style) {
     }
   }
 }
-// intro (0–3.5): dark pad, soft closed arp, footsteps
-pad(0, 3.6, [45, 52, 57], .07, .015);
-arpBar(1.5, 'Am', 4, .12, .1);
-// verse (3.5–9.5): Am F C
-['Am', 'F', 'C'].forEach((c, i) => {
-  const t = G0 + BAR * (1 + i);
-  arpBar(t, c, 4, .22 + i * .05, .14); bassBar(t, c, 4); pad(t, BAR + .05, CH[c][0], .035, .02); drums(t, 4, 'groove');
+// intro (0–2): dark pad, soft closed arp, footsteps
+pad(0, 2.1, [45, 52, 57], .07, .015);
+arpBar(0, 'Am', 4, .1, .08);
+// verse (2–10): Am F C G — gym, belts, coach Almog
+['Am', 'F', 'C', 'G'].forEach((c, i) => {
+  const t = 2 + BAR * i;
+  arpBar(t, c, 4, .2 + i * .05, .14); bassBar(t, c, 4); pad(t, BAR + .05, CH[c][0], .035, .02); drums(t, 4, 'groove');
 });
-// MMA (9.5–11.5) on G, aggressive; the MMA slam lands on the 11.5 downbeat
-arpBar(9.5, 'G', 4, .4, .14); bassBar(9.5, 'G', 4, .55); pad(9.5, 2.05, CH.G[0], .04, .03); drums(9.5, 4, 'mma');
-// 11.5–13.5 Am, groove back in
-arpBar(11.5, 'Am', 4, .35, .14); bassBar(11.5, 'Am', 4); pad(11.5, 2.05, CH.Am[0], .04, .03); drums(11.5, 4, 'groove');
-// chorus (13.5–17.5): F G Am E with the lead hook
-[['F', 13.5], ['G', 14.5], ['Am', 15.5], ['E', 16.5]].forEach(([c, t]) => {
+// MMA (10–12) on E, aggressive; the MMA slam lands on the 12.0 downbeat
+arpBar(10, 'E', 4, .4, .14); bassBar(10, 'E', 4, .55); pad(10, 2.05, CH.E[0], .04, .03); drums(10, 4, 'mma');
+// 12–14 Am, groove back in (coach Geva)
+arpBar(12, 'Am', 4, .35, .14); bassBar(12, 'Am', 4); pad(12, 2.05, CH.Am[0], .04, .03); drums(12, 4, 'groove');
+// chorus (14–18): F G Am E with the lead hook — champions
+[['F', 14], ['G', 15], ['Am', 16], ['E', 17]].forEach(([c, t]) => {
   arpBar(t, c, 2, .5, .15); bassBar(t, c, 2, .55); pad(t, 1.05, CH[c][0].map(m => m + 12), .04, .04);
 });
-drums(13.5, 8, 'chorus');
+drums(14, 8, 'chorus');
 [[0, 72, 1], [1, 77, 1], [2, 74, 1], [3, 79, 1], [4, 76, 1], [5, 81, .5], [5.5, 79, .5], [6, 76, 1], [7, 80, 1]]
-  .forEach(([b, m, l]) => lead(13.5 + b * BEAT, m, l * BEAT * .92));
-// build (17.5–19.5): F → G, snare roll, riser, a beat of air before the drop
-[['F', 17.5], ['G', 18.5]].forEach(([c, t]) => { arpBar(t, c, 2, .3 + (t - 17.5) * .3, .12); pad(t, 1.05, CH[c][0], .05, .02 + (t - 17.5) * .03); });
-bassNote(17.5, 29, 1, .45); bassNote(18.5, 31, .8, .45);
-{ let t = 17.5, step = .25, i = 0; while (t < 19.3) { snare(t, .12 + .28 * (t - 17.5) / 1.8, i++ % 2 ? .2 : -.2); t += step; step = t > 18.75 ? .0625 : t > 18.25 ? .125 : .25; } }
-riser(17.6, 1.75, .55);
-// drop (19.5–25): logo slam
-boom(19.5, 1.5); whoosh(19.45, 1.2, .35);
-pad(19.5, 5.5, [45, 57, 60, 64, 69], .07, .03);
-lead(19.5, 81, 2.2, .15); lead(21.75, 76, .4, .1); lead(22.25, 79, .4, .1); lead(22.75, 81, 1.6, .12);
-bassNote(19.5, 33, 2, .6); bassNote(21.5, 33, 2, .45);
-for (let b = 0; b < 2; b++) arpBar(21.5 + b * 2, 'Am', 4, .25 - b * .08, .11 - b * .03);
-drums(21.5, 4, 'half');
+  .forEach(([b, m, l]) => lead(14 + b * BEAT, m, l * BEAT * .92));
+// build (18–20): F → G, snare roll, riser, a beat of air before the drop
+[['F', 18], ['G', 19]].forEach(([c, t]) => { arpBar(t, c, 2, .3 + (t - 18) * .3, .12); pad(t, 1.05, CH[c][0], .05, .02 + (t - 18) * .03); });
+bassNote(18, 29, 1, .45); bassNote(19, 31, .8, .45);
+{ let t = 18, step = .25, i = 0; while (t < 19.8) { snare(t, .12 + .28 * (t - 18) / 1.8, i++ % 2 ? .2 : -.2); t += step; step = t > 19.25 ? .0625 : t > 18.75 ? .125 : .25; } }
+riser(18.1, 1.75, .55);
+// drop (20–25): logo slam
+boom(20, 1.5); whoosh(19.95, 1.2, .35);
+pad(20, 5, [45, 57, 60, 64, 69], .07, .03);
+lead(20, 81, 2.2, .15); lead(22.25, 76, .4, .1); lead(22.75, 79, .4, .1); lead(23.25, 81, 1.4, .12);
+bassNote(20, 33, 2, .6); bassNote(22, 33, 2, .45);
+for (let b = 0; b < 2; b++) arpBar(22 + b * 2, 'Am', 4, .25 - b * .08, .11 - b * .03);
+drums(22, 4, 'half');
 
 // ---------- sound effects synced to the picture ----------
 [.35, .85, 1.35, 1.85, 2.35].forEach((st, i) => { const t = M(st); kick(t, .8, 6, 110, 38); whoosh(t - .15, .18, .15, i % 2 ? .3 : -.3); });
-riser(2.2, .95, .3); whoosh(2.65, .45, .45);
+riser(1.6, .9, .3); whoosh(2.15, .45, .45);
 boom(M(4.15), .8); boom(M(4.65), .8); whoosh(M(4.15) - .3, .32, .4, -.5); whoosh(M(4.65) - .3, .32, .4, .5);
 whoosh(M(5.1), .4, .3, .6); tick(M(5.9), 880, .25);
 whoosh(M(7.6), .5, .4);
 [9.4, 10.3, 11.2].forEach(st => tick(M(st), 1760, .15)); boom(M(12.1), .7); tick(M(12.1), 2637, .2);
-whoosh(9.45, .55, .5, .7);
-[10.5, 10.75, 11.0, 11.25].forEach((t, i) => { kick(t, .75, 9, 150, 45); snare(t, .35); whoosh(t - .12, .14, .18, i % 2 ? .4 : -.4); });
-boom(11.5, 1.1); tick(11.7, 1318, .14);
-whoosh(12.45, .4, .55, -.7);
+// coach Almog
+whoosh(8.45, .55, .5, .7); tick(9.25, 1318, .12); tick(9.35, 1760, .1);
+whoosh(10.3, .35, .55, -.7);
+// MMA + coach Geva
+[11.0, 11.25, 11.5, 11.75].forEach((t, i) => { kick(t, .75, 9, 150, 45); snare(t, .35); whoosh(t - .12, .14, .18, i % 2 ? .4 : -.4); });
+boom(12.0, 1.1); whoosh(12.3, .4, .35, .5); tick(12.6, 1318, .12);
+whoosh(13.4, .35, .55, -.7);
+// champions
 tick(M(19.1), 1046, .18); tick(M(19.6), 1568, .2);
 [20.3, 20.7].forEach(st => kick(M(st), .7, 5, 120, 40)); boom(M(21.1), .8); tick(M(21.1), 2093, .18);
 whoosh(M(21.5), .4, .25, .5);
-whoosh(16.6, .45, .45);
+whoosh(17.1, .45, .45);
+// next champion + end card
 [27.1, 27.35, 27.6, 27.85].forEach(st => kick(M(st), .45, 8, 120, 40));
 tick(M(29.8), 1318, .15);
 for (let i = 0; i < 12; i++) tick(M(30.15 + i * .05), 2200 + i * 60, .04);

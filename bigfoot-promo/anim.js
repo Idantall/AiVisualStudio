@@ -1,6 +1,6 @@
 // Bigfoot Academy — BJJ & MMA adult team promo (1080x1920, 2D motion graphics)
 // Deterministic: renderFrame(t) draws the frame at time t (seconds).
-const W = 1080, H = 1920, DUR = 20;
+const W = 1080, H = 1920, DUR = 25;
 // Brand palette: black & white only (accents are white, outline type, or grey)
 const GOLD = '#FFFFFF', GOLD2 = '#FFFFFF', GOLD3 = '#5A5A5A', BG = '#060606', PAPER = '#F2F1ED';
 const PHONE = '052-308-3330';
@@ -556,7 +556,7 @@ function S7(t) {
 }
 
 // SM: MMA scene, local time tau (0–2.4s): octagon, rapid strike words, MMA slam
-const MMA_HITS = [.4, .65, .9, 1.15, 1.4];
+const MMA_HITS = [.5, .75, 1, 1.25, 1.5]; // on the 120 bpm grid (video 10.5–11.5)
 const MMA_WORDS = ['אגרופים', 'בעיטות', 'הפלות', 'קרקע'];
 function octagon(cx, cy, r, p) {
   const pt = i => { const a = -Math.PI / 2 + Math.PI / 8 + i * Math.PI / 4; return [cx + Math.cos(a) * r, cy + Math.sin(a) * r]; };
@@ -612,15 +612,15 @@ function SM(tau) {
     ring(W / 2, cy, h, tau, i === 4 ? 900 : 480, '#fff', i === 4 ? 18 : 8, .6);
   });
   MMA_WORDS.forEach((w, i) => {
-    const h = MMA_HITS[i]; if (tau < h - .08 || tau >= MMA_HITS[i + 1] - .02) return;
+    const h = MMA_HITS[i]; if (tau < h - .08 || tau >= MMA_HITS[i + 1] - .08) return;
     const p = prog(tau, h - .08, h + .05, E.outExpo);
     T(w, W / 2, cy, { size: 150, scale: lerp(1.8, 1, p), alpha: clamp(p * 1.5) });
   });
-  const pm = prog(tau, 1.32, 1.48, E.outExpo);
+  const pm = prog(tau, 1.42, 1.58, E.outExpo);
   if (pm > 0) T('MMA', W / 2, cy + 12, { font: 'B', size: 330, scale: lerp(2.2, 1, pm), alpha: clamp(pm * 1.5) });
-  burst(W / 2, cy, 1.4, tau, 50, 321, '#fff', 1400, 1, 8);
-  reveal('בהדרכת גבע בריטש', W / 2, 1480, { size: 74, w: 900, hl: '#fff', color: '#000' }, prog(tau, 1.6, 1.95, E.outExpo));
-  reveal('מאמן MMA · חגורה חומה ב-BJJ', W / 2, 1590, { size: 50, w: 400, color: '#cfcfcf' }, prog(tau, 1.75, 2.1, E.outExpo));
+  burst(W / 2, cy, 1.5, tau, 50, 321, '#fff', 1400, 1, 8);
+  reveal('בהדרכת גבע בריטש', W / 2, 1480, { size: 74, w: 900, hl: '#fff', color: '#000' }, prog(tau, 1.7, 2.05, E.outExpo));
+  reveal('מאמן MMA · חגורה חומה ב-BJJ', W / 2, 1590, { size: 50, w: 400, color: '#cfcfcf' }, prog(tau, 1.85, 2.2, E.outExpo));
   ctx.restore();
   MMA_HITS.forEach((h, i) => { const d = tau - h; if (d >= 0 && d < .15) full(`rgba(255,255,255,${(i === 4 ? .5 : .16) * (1 - d / .15)})`); });
 }
@@ -656,10 +656,11 @@ function whip(t, from, to, a, b) {
   }
   ctx.globalAlpha = 1;
 }
-// 20s TikTok cut: piecewise-linear map from video time to the story timeline the scenes are written in.
-// Story 13.35–18.8 (video 7.2–10.5) is replaced by the MMA scene; 22.4–24.6 is skipped.
+// 25s TikTok cut: piecewise-linear map from video time to the story timeline the scenes are written in.
+// Scene changes sit on the soundtrack's 120 bpm grid. Story 13.35–18.8 (video 9.5–12.8) is replaced by
+// the MMA scene; the end card plays at 1x.
 const CUT = [ // [video, story]
-  [0, 0], [2.2, 3.8], [4.6, 8.2], [7.2, 13.35], [10.5, 18.8], [13.0, 22.4], [13.0, 24.6], [15.2, 28.2], [20.0, 33.0]];
+  [0, 0], [3.0, 3.8], [6.0, 8.2], [9.5, 13.35], [12.8, 18.8], [16.7, 24.15], [17.0, 24.6], [19.5, 28.2], [25.0, 33.7]];
 function storyTime(t) {
   for (let i = 1; i < CUT.length; i++) {
     const [v0, s0] = CUT[i - 1], [v1, s1] = CUT[i];
@@ -667,6 +668,7 @@ function storyTime(t) {
     if (t <= v1 || i === CUT.length - 1) return s0 + (t - v0) * (s1 - s0) / (v1 - v0);
   }
 }
+const MMA_AT = 10.0;
 function renderFrame(t) {
   ctx = mainCtx; FRAME = new DOMMatrix();
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
@@ -674,15 +676,15 @@ function renderFrame(t) {
   const st = storyTime(t);
   const s = shake(st);
   ctx.save(); ctx.translate(s.x, s.y);
-  if (t < 7.2) safe(() => t < 2.2 ? S1(st) : t < 4.6 ? S2(st) : S3(st));
-  else if (t < 7.8) { // slat wipe belts → MMA
-    const tau = 13.35 + (t - 7.2) * 1.67;
-    slats(tau, () => S3(Math.min(tau, 13.8)), () => SM(t - 7.8), 13.35);
+  if (t < 9.5) safe(() => t < 3.0 ? S1(st) : t < 6.0 ? S2(st) : S3(st));
+  else if (t < MMA_AT) { // slat wipe belts → MMA
+    const tau = 13.35 + (t - 9.5) * 2;
+    slats(tau, () => S3(Math.min(tau, 13.8)), () => SM(t - MMA_AT), 13.35);
   }
-  else if (t < 10.2) safe(() => SM(t - 7.8));
-  else if (t < 10.5) whip(t, () => SM(t - 7.8), () => S5(18.8), 10.2, 10.5);
-  else if (t < 13.0) safe(() => { S5(st); full(`rgba(0,0,0,${prog(t, 12.75, 13.0, E.inCubic)})`); });
-  else if (t < 15.2) safe(() => S6(st));
+  else if (t < 12.5) safe(() => SM(t - MMA_AT));
+  else if (t < 12.8) whip(t, () => SM(t - MMA_AT), () => S5(18.8), 12.5, 12.8);
+  else if (t < 17.0) safe(() => S5(st));
+  else if (t < 19.5) safe(() => S6(st));
   else safe(() => S7(st));
   ctx.restore();
   // vignette + grain

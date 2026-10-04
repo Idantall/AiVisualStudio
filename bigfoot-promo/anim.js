@@ -1,6 +1,6 @@
 // Bigfoot Academy — BJJ & MMA adult team promo (1080x1920, 2D motion graphics)
 // Deterministic: renderFrame(t) draws the frame at time t (seconds).
-const W = 1080, H = 1920, DUR = 35;
+const W = 1080, H = 1920, DUR = 20;
 // Brand palette: black & white only (accents are white, outline type, or grey)
 const GOLD = '#FFFFFF', GOLD2 = '#FFFFFF', GOLD3 = '#5A5A5A', BG = '#060606', PAPER = '#F2F1ED';
 const PHONE = '052-331-9676';
@@ -621,21 +621,33 @@ function whip(t, from, to, a, b) {
   }
   ctx.globalAlpha = 1;
 }
+// 20s cut: piecewise-linear map from final-video time to the scene timeline (in "story" seconds).
+// The coaches scene (story 13.35–18.8) is dropped and replaced by a slat wipe; the end card plays at 1x.
+const CUT = [ // [video, story]
+  [0, 0], [2.5, 3.8], [5.4, 8.2], [8.6, 13.35], [9.3, 18.8], [12.8, 24.6], [15.0, 28.2], [20.0, 33.2]];
+function storyTime(t) {
+  for (let i = 1; i < CUT.length; i++) {
+    const [v0, s0] = CUT[i - 1], [v1, s1] = CUT[i];
+    if (t <= v1 || i === CUT.length - 1) return s0 + (t - v0) * (s1 - s0) / (v1 - v0);
+  }
+}
 function renderFrame(t) {
   ctx = mainCtx;
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
-  const s = shake(t);
+  const st = storyTime(t);
+  const s = shake(st);
   ctx.save(); ctx.translate(s.x, s.y);
-  if (t < 3.8) S1(t);
-  else if (t < 8.2) S2(t);
-  else if (t < 13.35) S3(t);
-  else if (t < 14.4) slats(t, S3, S4, 13.35);
-  else if (t < 18.3) S4(t);
-  else if (t < 18.8) whip(t, S4, S5, 18.3, 18.8);
-  else if (t < 24.6) S5(t);
-  else if (t < 28.2) S6(t);
-  else S7(t);
+  if (st < 3.8) S1(st);
+  else if (st < 8.2) S2(st);
+  else if (st < 13.35) S3(st);
+  else if (st < 18.8) { // slat wipe S3 → S5 over video 8.6–9.3
+    const tau = 13.35 + (t - 8.6) * 1.43;
+    slats(tau, () => S3(Math.min(tau, 13.8)), () => S5(18.8), 13.35);
+  }
+  else if (st < 24.6) S5(st);
+  else if (st < 28.2) S6(st);
+  else S7(st);
   ctx.restore();
   // vignette + grain
   const v = ctx.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H * .75);

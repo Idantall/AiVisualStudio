@@ -4,13 +4,24 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
-const SR = 44100, DUR = 35, N = SR * DUR;
+const SR = 44100, DUR = 20, N = SR * DUR;
 const L = new Float32Array(N), R = new Float32Array(N);
 let seed = 1;
+// Events are written on the 35s story timeline and mapped onto the 20s cut (same table as anim.js).
+const CUT = [[0, 0], [2.5, 3.8], [5.4, 8.2], [8.6, 13.35], [9.3, 18.8], [12.8, 24.6], [15.0, 28.2], [20.0, 33.2]];
+function M(st) {
+  for (let i = 1; i < CUT.length; i++) {
+    const [v0, s0] = CUT[i - 1], [v1, s1] = CUT[i];
+    if (st <= s1 || i === CUT.length - 1) return v0 + (st - s0) * (v1 - v0) / (s1 - s0);
+  }
+}
+let MAP = true; // false = times are already in video seconds
+const at = t => MAP ? M(t) : t;
+const span = (t, len) => MAP ? M(t + len) - M(t) : len;
 const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647 * 2 - 1;
 
 function add(t0, len, fn, gain = 1, pan = 0) {
-  const s0 = Math.round(t0 * SR), n = Math.round(len * SR);
+  const s0 = Math.round(at(t0) * SR), n = Math.round(len * SR);
   const gl = gain * Math.min(1, 1 - pan), gr = gain * Math.min(1, 1 + pan);
   for (let i = 0; i < n; i++) {
     const j = s0 + i; if (j < 0 || j >= N) continue;
@@ -43,6 +54,7 @@ const boom = (t0, g = 1.2) => {
   add(t0, 1.6, t => { lp += (rnd() - lp) * .03; return lp * 4 * Math.exp(-t * 3); }, g * .8);
 };
 const whoosh = (t0, len, g = .5, pan = 0) => {
+  len = Math.max(.2, span(t0, len));
   let lp = 0;
   add(t0, len, t => {
     const x = t / len, c = .02 + .25 * Math.sin(Math.PI * x) ** 2;
@@ -51,6 +63,7 @@ const whoosh = (t0, len, g = .5, pan = 0) => {
   }, g, pan);
 };
 const riser = (t0, len, g = .4) => {
+  len = span(t0, len);
   let lp = 0, ph = 0;
   add(t0, len, t => {
     const x = t / len; lp += (rnd() - lp) * (.03 + .4 * x * x);
@@ -63,7 +76,8 @@ const saw = (ph) => (ph / Math.PI) % 2 - 1;
 function pad(t0, len, freqs, g = .12, cutoff = .04) {
   const phs = freqs.flatMap(f => [0, 0, 0].map(() => Math.random() * 6));
   let lpL = 0, lpR = 0;
-  const s0 = Math.round(t0 * SR), n = Math.round(len * SR);
+  len = span(t0, len);
+  const s0 = Math.round(at(t0) * SR), n = Math.round(len * SR);
   for (let i = 0; i < n; i++) {
     const t = i / SR, env = Math.min(1, t / .8) * Math.min(1, (len - t) / 1.5);
     let a = 0, b = 0;
@@ -82,37 +96,37 @@ pad(0, 3.9, [55, 82.4], .09, .02);
 riser(2.6, 1.2, .35);
 whoosh(3.1, .7, .5);
 
-// --- main groove 3.8 → 27.0 (120 bpm, half-time feel) ---
-const beat = .5;
+// --- main groove: steady 120 bpm in video time, 2.5s → 14.25s ---
+MAP = false;
+const beat = .5, GEND = 14.25;
 const bass = [55, 43.65, 65.41, 49.0]; // A F C G
 const chords = [[220, 261.6, 329.6], [174.6, 220, 261.6], [261.6, 329.6, 392], [196, 246.9, 293.7]];
-for (let bar = 0; bar < 12; bar++) {
-  const b0 = 3.8 + bar * 4 * beat; if (b0 >= 27) break;
-  const ci = Math.floor(bar / 1) % 4;
-  // sub bass per bar, sidechained
+for (let bar = 0; bar < 8; bar++) {
+  const b0 = 2.5 + bar * 4 * beat; if (b0 >= GEND) break;
+  const ci = bar % 4;
   const f = bass[ci]; let ph = 0;
-  add(b0, Math.min(2, 27 - b0), t => {
+  add(b0, Math.min(2, GEND - b0), t => {
     ph += 2 * Math.PI * f / SR;
     const sc = 1 - .85 * Math.exp(-((t % beat) * 14));
     return (Math.sin(ph) + .25 * Math.sin(2 * ph)) * sc * .55;
   }, 1);
-  pad(b0, Math.min(2.05, 27 - b0), chords[ci], .028, .03);
+  pad(b0, Math.min(2.05, GEND - b0), chords[ci], .028, .03);
   for (let q = 0; q < 4; q++) {
-    const tq = b0 + q * beat; if (tq >= 27) break;
+    const tq = b0 + q * beat; if (tq >= GEND) break;
     if (q === 0 || (q === 2 && bar % 2 === 1)) kick(tq, .85);
     if (q === 2 && bar % 2 === 0) kick(tq + .25, .55);
     if (q === 1 || q === 3) snare(tq, .38);
     hat(tq + .25, .1, .2); hat(tq, .05, -.2);
   }
 }
+MAP = true;
 // hits & transitions
 boom(4.15, .9); boom(4.65, .9); whoosh(3.75, .45, .45, -.5); whoosh(4.25, .45, .45, .5);
 tick(5.0, 1320, .2); whoosh(5.05, .5, .35, .6); tick(5.9, 880, .3);
 whoosh(7.5, .75, .45); kick(8.2, .8, 4, 100, 35);
 [9.4, 10.3, 11.2].forEach(t => { tick(t, 1760, .18); whoosh(t - .05, .45, .25, -.4); });
 boom(12.1, .9); tick(12.1, 2637, .22);
-whoosh(13.35, .9, .55, .7); whoosh(14.3, .5, .3, -.6); whoosh(14.8, .5, .3, .6);
-whoosh(18.25, .6, .6, -.7);
+whoosh(13.35, 5.4, .55, .7);
 tick(19.1, 1046, .2); tick(19.6, 1568, .22);
 [20.3, 20.7].forEach(t => kick(t, .9, 5, 120, 40)); boom(21.1, 1);
 tick(21.1, 2093, .2); whoosh(21.5, .5, .3, .5);
@@ -124,8 +138,8 @@ pad(24.6, 3.6, [55, 82.4, 110], .07, .025);
 riser(26.9, 1.3, .5);
 // --- logo slam + end card ---
 boom(28.2, 1.4); whoosh(28.15, 1.2, .35);
-pad(28.2, 6.8, [110, 164.8, 220, 261.6], .05, .02);
-pad(28.2, 6.8, [55], .1, .05);
+pad(28.2, 5.0, [110, 164.8, 220, 261.6], .05, .02);
+pad(28.2, 5.0, [55], .1, .05);
 [29.8].forEach(t => tick(t, 1318, .18));
 for (let i = 0; i < 12; i++) tick(30.15 + i * .05, 2200 + i * 60, .05);
 

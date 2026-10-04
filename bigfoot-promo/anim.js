@@ -3,7 +3,7 @@
 const W = 1080, H = 1920, DUR = 20;
 // Brand palette: black & white only (accents are white, outline type, or grey)
 const GOLD = '#FFFFFF', GOLD2 = '#FFFFFF', GOLD3 = '#5A5A5A', BG = '#060606', PAPER = '#F2F1ED';
-const PHONE = '052-331-9676';
+const PHONE = '052-308-3330';
 
 const main = document.getElementById('c');
 const mainCtx = main.getContext('2d');

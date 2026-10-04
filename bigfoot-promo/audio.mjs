@@ -8,7 +8,7 @@ const SR = 44100, DUR = 20, N = SR * DUR;
 const L = new Float32Array(N), R = new Float32Array(N);
 let seed = 1;
 // Events are written on the 35s story timeline and mapped onto the 20s cut (same table as anim.js).
-const CUT = [[0, 0], [2.5, 3.8], [5.4, 8.2], [8.6, 13.35], [9.3, 18.8], [12.8, 24.6], [15.0, 28.2], [20.0, 33.2]];
+const CUT = [[0, 0], [2.2, 3.8], [4.6, 8.2], [7.2, 13.35], [10.5, 18.8], [13.0, 22.4], [13.0, 24.6], [15.2, 28.2], [20.0, 33.0]];
 function M(st) {
   for (let i = 1; i < CUT.length; i++) {
     const [v0, s0] = CUT[i - 1], [v1, s1] = CUT[i];
@@ -98,11 +98,11 @@ whoosh(3.1, .7, .5);
 
 // --- main groove: steady 120 bpm in video time, 2.5s → 14.25s ---
 MAP = false;
-const beat = .5, GEND = 14.25;
+const beat = .5, GEND = 14.45;
 const bass = [55, 43.65, 65.41, 49.0]; // A F C G
 const chords = [[220, 261.6, 329.6], [174.6, 220, 261.6], [261.6, 329.6, 392], [196, 246.9, 293.7]];
 for (let bar = 0; bar < 8; bar++) {
-  const b0 = 2.5 + bar * 4 * beat; if (b0 >= GEND) break;
+  const b0 = 2.2 + bar * 4 * beat; if (b0 >= GEND) break;
   const ci = bar % 4;
   const f = bass[ci]; let ph = 0;
   add(b0, Math.min(2, GEND - b0), t => {
@@ -126,11 +126,17 @@ tick(5.0, 1320, .2); whoosh(5.05, .5, .35, .6); tick(5.9, 880, .3);
 whoosh(7.5, .75, .45); kick(8.2, .8, 4, 100, 35);
 [9.4, 10.3, 11.2].forEach(t => { tick(t, 1760, .18); whoosh(t - .05, .45, .25, -.4); });
 boom(12.1, .9); tick(12.1, 2637, .22);
-whoosh(13.35, 5.4, .55, .7);
 tick(19.1, 1046, .2); tick(19.6, 1568, .22);
 [20.3, 20.7].forEach(t => kick(t, .9, 5, 120, 40)); boom(21.1, 1);
 tick(21.1, 2093, .2); whoosh(21.5, .5, .3, .5);
-whoosh(24.1, .55, .5);
+// --- MMA scene (video time) ---
+MAP = false;
+whoosh(7.1, .65, .55, .7);
+[8.2, 8.45, 8.7, 8.95].forEach((t, i) => { kick(t, .8, 9, 150, 45); snare(t, .45); whoosh(t - .12, .14, .2, i % 2 ? .4 : -.4); });
+boom(9.2, 1.2); tick(9.4, 1318, .16);
+whoosh(10.1, .45, .6, -.7);
+whoosh(12.7, .35, .45);
+MAP = true;
 // --- build to the logo ---
 pad(24.6, 3.6, [55, 82.4, 110], .07, .025);
 [24.9, 25.45, 26.0, 26.55].forEach(t => { kick(t, .8, 7, 90, 35); kick(t + .16, .45, 9, 90, 35); });
@@ -138,8 +144,8 @@ pad(24.6, 3.6, [55, 82.4, 110], .07, .025);
 riser(26.9, 1.3, .5);
 // --- logo slam + end card ---
 boom(28.2, 1.4); whoosh(28.15, 1.2, .35);
-pad(28.2, 5.0, [110, 164.8, 220, 261.6], .05, .02);
-pad(28.2, 5.0, [55], .1, .05);
+pad(28.2, 4.8, [110, 164.8, 220, 261.6], .05, .02);
+pad(28.2, 4.8, [55], .1, .05);
 [29.8].forEach(t => tick(t, 1318, .18));
 for (let i = 0; i < 12; i++) tick(30.15 + i * .05, 2200 + i * 60, .05);
 

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>BE PILATES – 25s</title>
+<style>
+@font-face{font-family:Heebo;src:url(fonts/heebo-he.woff2) format('woff2');font-weight:100 900;unicode-range:U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:Heebo;src:url(fonts/heebo-lat.woff2) format('woff2');font-weight:100 900;unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Frank;src:url(fonts/frank-he.woff2) format('woff2');font-weight:300 900;unicode-range:U+0590-05FF,U+200C-2010,U+FB1D-FB4F}
+@font-face{font-family:Frank;src:url(fonts/frank-lat.woff2) format('woff2');font-weight:300 900;unicode-range:U+0000-00FF,U+2000-206F}
+
+:root{
+  --cream:#F4EFE8; --sand:#DCD3C8; --taupe:#8C7B6B; --ink:#3F362F; --gold:#B08D57;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--cream)}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--cream);font-family:Heebo,sans-serif;color:var(--ink)}
+.scene{position:absolute;inset:0;opacity:0;will-change:opacity,transform}
+.abs{position:absolute}
+.blob{position:absolute;border-radius:50%;background:var(--sand)}
+.mult{mix-blend-mode:multiply}
+
+/* captions */
+.cap{position:absolute;left:0;right:0;text-align:center;direction:rtl}
+.cap .w{display:inline-block;margin:0 .14em;will-change:transform,opacity,filter}
+.h1{font-weight:300;font-size:84px;line-height:1.25;letter-spacing:.01em}
+.h2{font-weight:200;font-size:56px;line-height:1.35;color:var(--taupe)}
+.serif{font-family:Frank,serif;font-weight:400}
+.latin{direction:ltr;font-weight:200;letter-spacing:.32em;font-size:40px;color:var(--taupe)}
+.rule{position:absolute;left:50%;height:2px;background:var(--gold);transform:translateX(-50%)}
+
+/* grain + vignette overlay for a soft filmic feel */
+#grain{position:absolute;inset:0;pointer-events:none;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 55%,rgba(60,45,30,.18) 100%)}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- drifting ambient blobs, live under every light scene -->
+  <div id="amb">
+    <div class="blob" id="b1" style="width:620px;height:620px;opacity:.35"></div>
+    <div class="blob" id="b2" style="width:420px;height:420px;opacity:.28"></div>
+    <div class="blob" id="b3" style="width:260px;height:260px;opacity:.30;background:#E9E1D6"></div>
+  </div>
+
+  <!-- S1 · logo reveal -->
+  <div class="scene" id="s1">
+    <img src="assets/logo.png" id="s1logo" class="abs" style="width:980px;left:50px;top:560px">
+    <div class="cap latin" id="s1slogan" style="top:1310px">STRENGTH • BALANCE • PEACE</div>
+  </div>
+
+  <!-- S2 · woman -->
+  <div class="scene" id="s2">
+    <img src="assets/woman.png" id="s2img" class="abs" style="width:1060px;left:10px;top:250px">
+    <div class="cap h2" id="s2a" style="top:1210px">ברוכות הבאות ל־</div>
+    <div class="cap serif" id="s2b" style="top:1290px;font-size:104px;letter-spacing:.08em;direction:ltr">BE PILATES</div>
+    <div class="rule" id="s2rule" style="top:1460px"></div>
+    <div class="cap h2" id="s2c" style="top:1500px">סטודיו בוטיק לפילאטיס מכשירים</div>
+    <div class="cap h2" id="s2d" style="top:1580px">בנהריה</div>
+  </div>
+
+  <!-- S3 · studio in an arch (echoes the studio's arched mirrors) -->
+  <div class="scene" id="s3">
+    <div id="s3arch" class="abs" style="left:110px;top:170px;width:860px;height:1180px;border-radius:430px 430px 24px 24px;overflow:hidden;box-shadow:0 30px 80px rgba(80,60,40,.18)">
+      <img src="assets/studio.jpg" id="s3img" class="abs" style="height:1180px;top:0;left:0">
+    </div>
+    <div class="cap h1" id="s3a" style="top:1440px">חוויית אימון נשית,</div>
+    <div class="cap h1" id="s3b" style="top:1550px">שקטה ומעצימה</div>
+  </div>
+
+  <!-- S4 · engraved wood logo -->
+  <div class="scene" id="s4">
+    <img src="assets/wood.jpg" class="abs" style="width:1080px;height:1920px;object-fit:cover;filter:blur(24px) brightness(1.03);transform:scale(1.1)">
+    <img src="assets/wood.jpg" id="s4img" class="abs" style="width:1080px;left:0;top:120px;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 88%,transparent 100%)">
+    <div class="cap h1" id="s4a" style="top:1420px">עבודת גוף יסודית</div>
+    <div class="cap h1" id="s4b" style="top:1530px">וחיבור לנפש</div>
+    <div class="cap h2" id="s4c" style="top:1680px;font-size:46px">בהובלת יובל כהן</div>
+  </div>
+
+  <!-- S5 · gold letters + Hebrew slogan -->
+  <div class="scene" id="s5">
+    <div id="s5circle" class="abs" style="left:150px;top:300px;width:780px;height:780px;border-radius:50%;overflow:hidden">
+      <img src="assets/gold.jpg" id="s5img" class="abs" style="width:800px;left:-10px;top:-10px">
+    </div>
+    <div class="cap serif" id="s5a" style="top:1230px;font-size:92px;font-weight:300">
+      <span class="w">כוח</span><span class="w dot" style="color:var(--gold)">•</span><span class="w">איזון</span><span class="w dot" style="color:var(--gold)">•</span><span class="w">שלווה</span>
+    </div>
+  </div>
+
+  <!-- S6 · end card -->
+  <div class="scene" id="s6">
+    <img src="assets/logo.png" id="s6logo" class="abs" style="width:860px;left:110px;top:330px">
+    <div class="rule" id="s6rule" style="top:1050px"></div>
+    <div class="cap h1" id="s6a" style="top:1100px;font-size:72px">תאמי אימון ניסיון בוואטסאפ</div>
+    <div class="cap" id="s6b" style="top:1225px;font-size:64px;font-weight:300;direction:ltr;letter-spacing:.06em">054-486-6411</div>
+    <div class="cap h2" id="s6c" style="top:1340px;font-size:48px;direction:ltr">Instagram · @be_pilates___</div>
+    <div class="cap h2" id="s6d" style="top:1440px;font-size:48px">דרך יחיעם 1, נהריה</div>
+  </div>
+
+  <!-- circular wipe used between scenes -->
+  <div id="wipe" class="blob" style="width:200px;height:200px;left:440px;top:860px;transform:scale(0);background:var(--sand)"></div>
+
+  <div id="vig"></div>
+  <div id="grain"></div>
+</div>
+
+<script>
+const DUR = 25;
+const $ = id => document.getElementById(id);
+const clamp = (x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lin = (t,a,b)=>clamp((t-a)/(b-a));
+const ease = x => x<.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/2;     // easeInOutCubic
+const eout = x => 1-Math.pow(1-x,4);                             // easeOutQuart
+const mix = (a,b,p)=>a+(b-a)*p;
+
+// fade in over [a,a+fi], hold, fade out over [b-fo,b]
+function win(t,a,b,fi=.8,fo=.8){ return ease(lin(t,a,a+fi)) * (1-ease(lin(t,b-fo,b))); }
+
+// soft "rise + unblur" entrance used by every caption
+function rise(el,t,start,d=1.1,dist=36){
+  const p = eout(lin(t,start,start+d));
+  el.style.opacity = p;
+  el.style.transform = `translateY(${(1-p)*dist}px)`;
+  el.style.filter = `blur(${(1-p)*10}px)`;
+}
+// split a caption into words once, then stagger them
+function words(el){
+  if(!el._w){
+    if(!el.querySelector('.w')) el.innerHTML = el.textContent.trim().split(/\s+/).map(w=>`<span class="w">${w}</span>`).join(' ');
+    el._w=[...el.querySelectorAll('.w')];
+  }
+  return el._w;
+}
+function riseWords(el,t,start,stagger=.14,d=1.1){
+  el.style.opacity=1;
+  words(el).forEach((w,i)=>rise(w,t,start+i*stagger,d,30));
+}
+
+function renderAt(t){
+  // ambient drift (slow sine paths)
+  const s = t*0.25;
+  $('b1').style.transform=`translate(${-180+60*Math.sin(s)}px,${-120+50*Math.cos(s*.8)}px)`;
+  $('b2').style.transform=`translate(${760+50*Math.cos(s*.9)}px,${1500+60*Math.sin(s*.7)}px)`;
+  $('b3').style.transform=`translate(${820+40*Math.sin(s*1.2)}px,${120+40*Math.cos(s)}px)`;
+
+  // ── S1 0 – 5.2 ───────────────────────────────
+  const s1=$('s1'); s1.style.opacity = 1-ease(lin(t,4.6,5.4));
+  // handwritten feel: soft-edged left→right mask sweep over the logo
+  const r = eout(lin(t,.5,3.0))*130 - 15;   // percent
+  const m = `linear-gradient(90deg,#000 ${r}%,transparent ${r+15}%)`;
+  $('s1logo').style.webkitMaskImage=m; $('s1logo').style.maskImage=m;
+  $('s1logo').style.transform=`scale(${mix(1.04,1,eout(lin(t,0,4.5)))})`;
+  const sl=$('s1slogan'); const ps=eout(lin(t,2.6,4.0));
+  sl.style.opacity=ps; sl.style.letterSpacing=`${mix(.6,.32,ps)}em`;
+
+  // ── S2 5 – 10.4 ───────────────────────────────
+  const a2=win(t,5.0,10.4,.9,.8); $('s2').style.opacity=a2;
+  $('s2img').style.transform=`translateY(${mix(40,-20,lin(t,5,10.4))}px) scale(${mix(.96,1.03,lin(t,5,10.4))})`;
+  rise($('s2a'),t,5.8); rise($('s2b'),t,6.3,1.4,24);
+  $('s2rule').style.width=`${eout(lin(t,7.0,8.0))*220}px`;
+  riseWords($('s2c'),t,7.4); rise($('s2d'),t,8.2);
+
+  // ── S3 10 – 15.4 ──────────────────────────────
+  $('s3').style.opacity=win(t,10.0,15.4,.9,.8);
+  const p3=lin(t,10,15.4);
+  const arch=$('s3arch');
+  // arch grows open from a smaller pill
+  const g=eout(lin(t,10,11.6));
+  arch.style.clipPath=`inset(${(1-g)*18}% ${(1-g)*18}% ${(1-g)*18}% ${(1-g)*18}% round 430px 430px 24px 24px)`;
+  // slow pan across the room (image is ~1764px wide at this height)
+  $('s3img').style.transform=`translateX(${mix(-40,-880,ease(p3))}px) scale(${mix(1.08,1,p3)})`;
+  riseWords($('s3a'),t,11.0); riseWords($('s3b'),t,11.9);
+
+  // ── S4 15 – 19.9 ──────────────────────────────
+  $('s4').style.opacity=win(t,15.0,19.9,.9,.8);
+  const p4=lin(t,15,19.9);
+  $('s4img').style.transform=`scale(${mix(1.0,1.09,p4)})`;
+  riseWords($('s4a'),t,15.8); riseWords($('s4b'),t,16.6); rise($('s4c'),t,17.6);
+  [$('s4a'),$('s4b')].forEach(e=>{e.style.textShadow='0 2px 30px rgba(244,239,232,.9)'});
+
+  // ── S5 19.5 – 22.6 ────────────────────────────
+  $('s5').style.opacity=win(t,19.5,22.7,.8,.7);
+  const c=eout(lin(t,19.5,21));
+  $('s5circle').style.clipPath=`circle(${mix(8,50,c)}% at 50% 50%)`;
+  $('s5img').style.transform=`scale(${mix(1.15,1.0,lin(t,19.5,22.7))})`;
+  words($('s5a')).forEach((w,i)=>rise(w,t,20.2+i*.22,1.0,30));
+  $('s5a').style.opacity=1;
+
+  // ── S6 22.3 – 25 ──────────────────────────────
+  $('s6').style.opacity=ease(lin(t,22.3,23.1));
+  const lp=eout(lin(t,22.4,24.0));
+  const m6=`linear-gradient(90deg,#000 ${lp*130-15}%,transparent ${lp*130}%)`;
+  $('s6logo').style.webkitMaskImage=m6; $('s6logo').style.maskImage=m6;
+  $('s6rule').style.width=`${eout(lin(t,23.0,23.8))*260}px`;
+  rise($('s6a'),t,23.0,.9); rise($('s6b'),t,23.3,.9); rise($('s6c'),t,23.55,.9); rise($('s6d'),t,23.8,.9);
+
+  // circle wipes at scene boundaries: grow then fade
+  const wipes=[5.0,10.0,15.0];
+  let ws=0, wo=0;
+  for(const w of wipes){
+    const q=lin(t,w-.6,w+.9);
+    if(q>0&&q<1){ ws=Math.max(ws,eout(q)*14); wo=Math.max(wo,Math.sin(q*Math.PI)*.55); }
+  }
+  $('wipe').style.transform=`scale(${ws})`; $('wipe').style.opacity=wo;
+}
+
+window.renderAt=renderAt; window.DUR=DUR;
+
+// live preview when opened in a browser (renderer passes ?render=1)
+if(!location.search.includes('render')){
+  const t0=performance.now();
+  (function loop(){ renderAt(((performance.now()-t0)/1000)%DUR); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>

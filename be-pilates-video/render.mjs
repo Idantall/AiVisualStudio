@@ -22,7 +22,7 @@ if (stillsArg > 0) {
     `${dir}/out/be-pilates-silent.mp4`], { stdio: ['pipe','inherit','inherit'] });
   for (let f = 0; f < total; f++) {
     await page.evaluate(t => renderAt(t), f / fps);
-    const buf = await page.screenshot({ type: 'png' });
+    const buf = await page.screenshot({ type: 'jpeg', quality: 95 });
     if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));
     if (f % 75 === 0) console.log('frame', f, '/', total);
   }

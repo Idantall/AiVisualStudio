@@ -1,5 +1,6 @@
 stills/
 stills_sheet.jpg
 video_check.jpg
-out/pad.wav
+out/*.wav
 out/be-pilates-silent.mp4
+out/render.log

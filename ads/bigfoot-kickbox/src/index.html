@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&family=Montserrat:wght@500;800&display=swap" rel="stylesheet">
+<style>
+  :root { --pink:#ff1a8c; --pink2:#ff4fb0; --black:#070707; --white:#ffffff; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1080px; height:1920px; overflow:hidden; background:var(--black); }
+  body { font-family:'Heebo',sans-serif; color:#fff; }
+  #stage { position:absolute; inset:0; overflow:hidden; background:var(--black); }
+  .layer { position:absolute; inset:0; }
+  .abs { position:absolute; white-space:nowrap; }
+  .c { left:0; right:0; text-align:center; }
+  .rough { filter:url(#rough); }
+  .brush { background:var(--pink); filter:url(#rough); }
+  .grain { position:absolute; inset:-50%; opacity:.07; pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>"); }
+  .vign { position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(0,0,0,0) 45%, rgba(0,0,0,.75) 100%); }
+  .word { font-weight:900; font-size:300px; line-height:1; letter-spacing:-4px; white-space:nowrap; }
+  .ltr { direction:ltr; unicode-bidi:isolate; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="rough" x="-10%" y="-30%" width="120%" height="160%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035 0.12" numOctaves="3" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="38" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<div id="stage">
+
+  <!-- ============ SCENE 1 : INTRO ============ -->
+  <div id="s1" class="layer">
+    <div class="layer" style="background:radial-gradient(circle at 50% 45%, #2a0618 0%, #070707 65%)"></div>
+    <div id="s1bar1" class="abs brush" style="left:-200px; width:1480px; top:610px; height:120px; transform-origin:right center;"></div>
+    <div id="s1bar2" class="abs brush" style="left:-200px; width:1480px; top:1270px; height:60px; background:#fff; transform-origin:left center;"></div>
+    <img id="s1foot" class="abs" src="foot.png" style="left:470px; top:300px; width:140px;">
+    <div id="s1t1" class="abs c word" style="top:750px; font-size:230px;">קיקבוקס</div>
+    <div id="s1t2wrap" class="abs" style="left:150px; width:780px; top:1010px; height:230px;">
+      <div id="s1t2bg" class="abs brush" style="inset:0;"></div>
+      <div id="s1t2" class="abs c word" style="top:-8px; font-size:220px; color:var(--black);">לנשים</div>
+    </div>
+    <div id="s1brand" class="abs c" style="top:1400px; font-family:Montserrat; font-weight:800; font-size:44px; letter-spacing:14px; direction:ltr;">BIGFOOT ACADEMY</div>
+  </div>
+
+  <!-- ============ SCENE 2 : KEYWORDS ============ -->
+  <div id="s2" class="layer">
+    <div id="s2photo" class="abs" style="left:-60px; top:-60px; width:1200px; height:2040px; background:url(fighters.jpg) center 30%/cover; filter:grayscale(1) contrast(1.25) brightness(.55);"></div>
+    <div class="layer" style="background:var(--pink); mix-blend-mode:multiply; opacity:.55"></div>
+    <div class="layer" style="background:linear-gradient(180deg, rgba(7,7,7,.85) 0%, rgba(7,7,7,.2) 40%, rgba(7,7,7,.2) 60%, rgba(7,7,7,.9) 100%)"></div>
+    <div id="s2stripe" class="abs brush" style="left:-300px; width:1700px; top:1530px; height:26px; transform:rotate(-8deg);"></div>
+    <div id="s2words"></div>
+    <div id="s2count" class="abs ltr" style="left:80px; top:150px; font-family:Montserrat; font-weight:800; font-size:40px; letter-spacing:6px; color:#fff;"></div>
+    <div id="s2tag" class="abs" style="right:80px; top:140px; font-weight:900; font-size:52px; color:#fff;">קיקבוקס לנשים</div>
+    <div id="s2flash" class="layer" style="background:#fff; opacity:0"></div>
+  </div>
+
+  <!-- ============ SCENE 3 : COACH ============ -->
+  <div id="s3" class="layer">
+    <div class="layer" style="background:radial-gradient(circle at 70% 30%, #33061e 0%, #070707 60%)"></div>
+    <div id="s3big" class="abs ltr" style="left:-40px; top:120px; font-family:Montserrat; font-weight:800; font-size:340px; color:transparent; -webkit-text-stroke:3px rgba(255,26,140,.35); white-space:nowrap;">KICKBOX</div>
+    <div id="s3frame" class="abs" style="left:110px; top:420px; width:860px; height:552px;">
+      <div class="abs brush" style="inset:-26px -26px 26px 26px;"></div>
+      <div id="s3img" class="abs" style="inset:0; background:url(winner.jpg) center/cover; box-shadow:0 30px 80px rgba(0,0,0,.6);"></div>
+    </div>
+    <div id="s3l1w" class="abs" style="right:110px; top:1090px; height:130px; overflow:hidden;">
+      <div id="s3l1" style="background:var(--pink); color:#070707; font-weight:900; font-size:96px; line-height:130px; padding:0 40px;">בהדרכת גוליאן</div>
+    </div>
+    <div id="s3l2" class="abs" style="right:110px; top:1270px; font-weight:900; font-size:66px;">אלופת הארץ <span style="color:var(--pink)">6</span> שנים ברציפות</div>
+    <div id="s3l3" class="abs" style="right:110px; top:1375px; font-weight:900; font-size:66px;">מקום <span style="color:var(--pink)">שלישי</span> בגביע העולם</div>
+    <div id="s3l4" class="abs" style="right:110px; top:1520px; font-weight:400; font-size:56px; color:#ddd;">מדריכת קיקבוקס מוסמכת</div>
+  </div>
+
+  <!-- ============ SCENE 4 : CTA ============ -->
+  <div id="s4" class="layer" style="background:var(--pink)">
+    <div id="s4tex" class="layer" style="background:repeating-linear-gradient(-55deg, rgba(0,0,0,.06) 0 40px, rgba(0,0,0,0) 40px 80px);"></div>
+    <div id="s4l1" class="abs c word" style="top:330px; font-size:170px; color:#070707;">כולן מוזמנות</div>
+    <div id="s4l2w" class="abs" style="left:110px; right:110px; top:540px; height:190px;">
+      <div id="s4l2bg" class="abs" style="inset:0; background:#070707; transform-origin:right center;"></div>
+      <div id="s4l2" class="abs c" style="top:10px; font-weight:900; font-size:130px; color:#fff;">לאימון ניסיון</div>
+    </div>
+    <div id="s4l3" class="abs c" style="top:790px; font-weight:700; font-size:66px; color:#070707;">יום שלישי <span class="ltr">20.10</span> | <span class="ltr">19:00</span></div>
+    <div id="s4card" class="abs" style="left:90px; right:90px; top:1050px; height:520px; background:#070707; border-radius:36px; box-shadow:0 40px 90px rgba(0,0,0,.35);">
+      <div id="s4p1" class="abs c" style="top:70px; font-weight:900; font-size:100px; color:var(--pink);">לפרטים</div>
+      <div id="s4p2" class="abs c ltr" style="top:230px; font-family:Montserrat; font-weight:800; font-size:122px; color:#fff; letter-spacing:2px;">052-3083330</div>
+      <div id="s4pl" class="abs" style="left:200px; right:200px; top:410px; height:10px; background:var(--pink); transform-origin:center;"></div>
+    </div>
+  </div>
+
+  <!-- ============ SCENE 5 : LOGO ============ -->
+  <div id="s5" class="layer">
+    <div class="layer" style="background:#070707"></div>
+    <div id="s5glow" class="layer" style="background:radial-gradient(circle at 50% 44%, rgba(255,26,140,.55) 0%, rgba(255,26,140,.12) 30%, rgba(7,7,7,0) 55%)"></div>
+    <div id="s5ring" class="abs" style="left:540px; top:840px; width:10px; height:10px; border-radius:50%; border:6px solid var(--pink); transform:translate(-50%,-50%);"></div>
+    <img id="s5logo" class="abs" src="logo_white.png" style="left:175px; top:540px; width:730px;">
+    <div id="s5line" class="abs" style="left:290px; width:500px; top:1240px; height:8px; background:var(--pink);"></div>
+    <div id="s5k" class="abs c" style="top:1300px; font-weight:900; font-size:64px;">קיקבוקס לנשים</div>
+    <div id="s5ph" class="abs c" style="top:1400px; font-weight:700; font-size:56px; color:var(--pink);">לפרטים <span class="ltr">052-3083330</span></div>
+  </div>
+
+  <!-- ============ TRANSITION LAYERS ============ -->
+  <div id="w1" class="abs brush" style="width:2200px; height:3000px; top:-540px; left:0;"></div>
+  <div id="w1b" class="abs" style="width:2200px; height:3000px; top:-540px; left:0; background:#070707;"></div>
+  <div id="iris" class="abs" style="left:540px; top:960px; width:10px; height:10px; border-radius:50%; background:#070707; transform:translate(-50%,-50%);"></div>
+
+  <div class="grain" id="grain"></div>
+  <div class="vign"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const cl = x => Math.max(0, Math.min(1, x));
+const P = (t, a, b) => cl((t - a) / (b - a));
+const outCubic = x => 1 - Math.pow(1 - x, 3);
+const inCubic = x => x * x * x;
+const inOutCubic = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const outExpo = x => x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
+const outBack = x => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const lerp = (a, b, x) => a + (b - a) * x;
+const show = (el, v) => el.style.visibility = v ? 'visible' : 'hidden';
+
+// keywords: [text, start]
+const WORDS = [['כוח', 2.05], ['עוצמה', 2.80], ['משמעת', 3.55], ['אירובי', 4.30], ['כושר', 5.05], ['ספורט', 5.80]];
+const WDUR = 0.75;
+const wordsHost = $('s2words');
+WORDS.forEach(([w], i) => {
+  const d = document.createElement('div');
+  d.className = 'abs';
+  d.style.cssText = 'left:0; right:0; top:760px; height:400px;';
+  const inv = i % 2 === 1;
+  d.innerHTML = `
+    <div class="abs brush" style="left:${inv ? 60 : 140}px; right:${inv ? 60 : 140}px; top:${inv ? 40 : 250}px; height:${inv ? 330 : 110}px; transform-origin:${inv ? 'right' : 'left'} center;"></div>
+    <div class="abs c word" style="top:20px; color:${inv ? '#070707' : '#fff'}; text-shadow:${inv ? 'none' : '0 12px 40px rgba(0,0,0,.6)'}">${w}</div>`;
+  wordsHost.appendChild(d);
+});
+const wordEls = [...wordsHost.children];
+
+function seek(t) {
+  // grain jitter
+  $('grain').style.transform = `translate(${(Math.sin(t * 91) * 40) | 0}px, ${(Math.cos(t * 73) * 40) | 0}px)`;
+
+  // ---------- SCENE 1 (0 - 2.05) ----------
+  show($('s1'), t < 2.1);
+  if (t < 2.1) {
+    const b1 = outExpo(P(t, 0.05, 0.45));
+    $('s1bar1').style.transform = `rotate(-8deg) scaleX(${b1})`;
+    const b2 = outExpo(P(t, 0.9, 1.3));
+    $('s1bar2').style.transform = `rotate(-8deg) scaleX(${b2})`;
+    const f = outCubic(P(t, 0.1, 0.6));
+    $('s1foot').style.opacity = f;
+    $('s1foot').style.transform = `translateY(${lerp(-60, 0, f)}px) rotate(${lerp(-12, 0, f)}deg)`;
+    const a = P(t, 0.25, 0.55), ae = outCubic(a);
+    $('s1t1').style.opacity = cl(a * 3);
+    $('s1t1').style.filter = `blur(${lerp(20, 0, ae)}px)`;
+    const shake = t > 0.5 && t < 0.75 ? Math.sin(t * 160) * 10 * (1 - P(t, 0.5, 0.75)) : 0;
+    $('s1t1').style.transform = `translateX(${shake}px) scale(${lerp(2.2, 1, ae)})`;
+    const b = P(t, 0.6, 0.95);
+    $('s1t2bg').style.transform = `scaleX(${outExpo(b)})`;
+    $('s1t2bg').style.transformOrigin = 'right center';
+    const c = outBack(P(t, 0.75, 1.1));
+    $('s1t2').style.opacity = P(t, 0.75, 0.85);
+    $('s1t2').style.transform = `translateY(${lerp(80, 0, c)}px)`;
+    const br = outCubic(P(t, 1.05, 1.6));
+    $('s1brand').style.opacity = br;
+    $('s1brand').style.letterSpacing = `${lerp(40, 14, br)}px`;
+    // slow push
+    $('s1').style.transform = `scale(${1 + t * 0.03})`;
+  }
+
+  // ---------- WIPE 1 : pink + black diagonal (1.75 -> 2.35) ----------
+  {
+    const p1 = inOutCubic(P(t, 1.72, 2.30));
+    const p2 = inOutCubic(P(t, 1.80, 2.38));
+    // travel from right offscreen to left offscreen
+    $('w1').style.transform = `translateX(${lerp(1300, -2600, p1)}px) skewX(-18deg)`;
+    $('w1b').style.transform = `translateX(${lerp(1300, -2600, p2)}px) skewX(-18deg)`;
+    const active = t > 1.7 && t < 2.4;
+    // reuse for other wipes below
+    if (!active) {
+      let done = false;
+      // wipe 2: 6.35 -> 6.95 (keywords -> coach)
+      if (t > 6.3 && t < 7.0) {
+        const q1 = inOutCubic(P(t, 6.33, 6.91)), q2 = inOutCubic(P(t, 6.41, 6.99));
+        $('w1').style.transform = `translateX(${lerp(-2300, 1300, q1)}px) skewX(18deg)`;
+        $('w1b').style.transform = `translateX(${lerp(-2300, 1300, q2)}px) skewX(18deg)`;
+        done = true;
+      }
+      // wipe 3: 9.35 -> 9.95 (coach -> CTA) pink only
+      if (t > 9.3 && t < 10.0) {
+        const q1 = inOutCubic(P(t, 9.33, 9.91));
+        $('w1').style.transform = `translateX(${lerp(1300, -2600, q1)}px) skewX(-18deg)`;
+        $('w1b').style.transform = `translateX(3000px)`;
+        done = true;
+      }
+      if (!done) { $('w1').style.transform = 'translateX(3000px)'; $('w1b').style.transform = 'translateX(3000px)'; }
+    }
+  }
+
+  // ---------- SCENE 2 : KEYWORDS (2.0 - 6.65) ----------
+  show($('s2'), t >= 1.95 && t < 6.7);
+  if (t >= 1.95 && t < 6.7) {
+    const k = P(t, 1.95, 6.7);
+    $('s2photo').style.transform = `scale(${1.05 + k * 0.12}) translate(${k * -30}px, ${k * 20}px)`;
+    $('s2stripe').style.transform = `rotate(-8deg) translateX(${lerp(600, -600, k)}px)`;
+    let flash = 0, idx = -1;
+    wordEls.forEach((el, i) => {
+      const s = WORDS[i][1], e = s + WDUR;
+      const on = t >= s - 0.02 && t < e + 0.12;
+      show(el, on);
+      if (!on) return;
+      idx = t >= s ? i : idx;
+      const inn = outExpo(P(t, s, s + 0.28));
+      const out = inCubic(P(t, e - 0.04, e + 0.1));
+      const bar = el.children[0], txt = el.children[1];
+      bar.style.transform = `rotate(${i % 2 ? 2 : -3}deg) scaleX(${outExpo(P(t, s + 0.02, s + 0.3))})`;
+      txt.style.opacity = cl(P(t, s, s + 0.08)) * (1 - out);
+      txt.style.filter = `blur(${lerp(18, 0, inn) + out * 20}px)`;
+      const rot = (i % 2 ? 1 : -1) * lerp(6, 0, inn);
+      txt.style.transform = `scale(${lerp(1.7, 1, inn) * (1 + out * 0.5)}) rotate(${rot}deg) translateY(${lerp(0, 0, inn)}px)`;
+      el.style.opacity = 1 - out;
+      el.style.transform = `translateX(${out * (i % 2 ? 300 : -300)}px)`;
+      flash = Math.max(flash, 1 - P(t, s, s + 0.12));
+    });
+    $('s2flash').style.opacity = flash * 0.22;
+    $('s2count').textContent = idx >= 0 ? `0${idx + 1} / 06` : '';
+    $('s2tag').style.opacity = outCubic(P(t, 2.1, 2.5));
+    // subtle camera shake on hits
+    const lastHit = Math.max(...WORDS.map(w => (t >= w[1] ? w[1] : -9)));
+    const sh = t - lastHit < 0.15 ? (1 - (t - lastHit) / 0.15) : 0;
+    $('s2').style.transform = `translate(${Math.sin(t * 190) * 9 * sh}px, ${Math.cos(t * 170) * 9 * sh}px)`;
+  }
+
+  // ---------- SCENE 3 : COACH (6.6 - 9.65) ----------
+  show($('s3'), t >= 6.6 && t < 9.7);
+  if (t >= 6.6 && t < 9.7) {
+    const k = P(t, 6.6, 9.7);
+    $('s3big').style.transform = `translateX(${lerp(200, -250, k)}px)`;
+    const fr = outCubic(P(t, 6.7, 7.3));
+    $('s3frame').style.opacity = fr;
+    $('s3frame').style.transform = `translateY(${lerp(120, 0, fr)}px) rotate(${lerp(-4, -1.5, fr)}deg) scale(${1 + k * 0.03})`;
+    $('s3img').style.clipPath = `inset(0 0 ${100 - fr * 100}% 0)`;
+    const l1 = outExpo(P(t, 7.15, 7.6));
+    $('s3l1').style.transform = `translateY(${lerp(130, 0, l1)}px)`;
+    const fly = (el, a) => { const x = outCubic(P(t, a, a + 0.45)); el.style.opacity = x; el.style.transform = `translateX(${lerp(-90, 0, x)}px)`; el.style.filter = `blur(${lerp(10, 0, x)}px)`; };
+    fly($('s3l2'), 7.5); fly($('s3l3'), 7.8); fly($('s3l4'), 8.1);
+  }
+
+  // ---------- SCENE 4 : CTA (9.6 - 12.75) ----------
+  show($('s4'), t >= 9.6 && t < 12.8);
+  if (t >= 9.6 && t < 12.8) {
+    const k = P(t, 9.6, 12.8);
+    $('s4tex').style.transform = `translateX(${k * 120}px)`;
+    const a = outBack(P(t, 9.75, 10.15));
+    $('s4l1').style.opacity = P(t, 9.75, 9.9);
+    $('s4l1').style.transform = `scale(${lerp(0.6, 1, a)})`;
+    $('s4l2bg').style.transform = `scaleX(${outExpo(P(t, 10.0, 10.4))})`;
+    const b = outCubic(P(t, 10.15, 10.5));
+    $('s4l2').style.opacity = b; $('s4l2').style.transform = `translateY(${lerp(40, 0, b)}px)`;
+    const c = outCubic(P(t, 10.4, 10.8));
+    $('s4l3').style.opacity = c; $('s4l3').style.transform = `translateY(${lerp(30, 0, c)}px)`;
+    const d = outBack(P(t, 10.75, 11.25));
+    $('s4card').style.opacity = P(t, 10.75, 10.95);
+    $('s4card').style.transform = `translateY(${lerp(300, 0, d)}px) rotate(${lerp(4, 0, d)}deg)`;
+    const e = outCubic(P(t, 11.0, 11.35));
+    $('s4p1').style.opacity = e;
+    const f = outExpo(P(t, 11.2, 11.6));
+    $('s4p2').style.opacity = P(t, 11.2, 11.35);
+    $('s4p2').style.transform = `scale(${lerp(1.5, 1, f)})`;
+    $('s4p2').style.filter = `blur(${lerp(12, 0, f)}px)`;
+    $('s4pl').style.transform = `scaleX(${outExpo(P(t, 11.45, 11.9))})`;
+    // pulse phone
+    const pulse = t > 11.7 ? 1 + 0.035 * Math.max(0, Math.sin((t - 11.7) * Math.PI * 2)) : 1;
+    $('s4card').style.transform += ` scale(${pulse})`;
+  }
+
+  // ---------- IRIS to logo (12.25 - 12.85) ----------
+  {
+    const r = inOutCubic(P(t, 12.25, 12.8));
+    const on = t > 12.25 && t < 12.85;
+    show($('iris'), on);
+    $('iris').style.transform = `translate(-50%,-50%) scale(${r * 260})`;
+  }
+
+  // ---------- SCENE 5 : LOGO (12.75 - 15) ----------
+  show($('s5'), t >= 12.75);
+  if (t >= 12.75) {
+    const g = outCubic(P(t, 12.75, 13.6));
+    $('s5glow').style.opacity = g * (0.85 + 0.15 * Math.sin(t * 4));
+    const ring = P(t, 12.8, 13.7);
+    $('s5ring').style.transform = `translate(-50%,-50%) scale(${lerp(1, 160, outCubic(ring))})`;
+    $('s5ring').style.opacity = 1 - ring;
+    const l = outCubic(P(t, 12.8, 13.6));
+    $('s5logo').style.opacity = l;
+    $('s5logo').style.filter = `blur(${lerp(24, 0, l)}px) drop-shadow(0 0 ${lerp(60, 24, l)}px rgba(255,26,140,.55))`;
+    $('s5logo').style.transform = `scale(${lerp(0.82, 1, l) + P(t, 13.6, 15) * 0.03})`;
+    $('s5line').style.transform = `scaleX(${outExpo(P(t, 13.4, 13.9))})`;
+    const k = outCubic(P(t, 13.6, 14.0));
+    $('s5k').style.opacity = k; $('s5k').style.transform = `translateY(${lerp(30, 0, k)}px)`;
+    const ph = outCubic(P(t, 13.8, 14.2));
+    $('s5ph').style.opacity = ph; $('s5ph').style.transform = `translateY(${lerp(30, 0, ph)}px)`;
+  }
+}
+window.seek = seek;
+seek(0);
+</script>
+</body>
+</html>

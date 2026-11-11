@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>פתיח – פודקאסט הכושר של ינאי בכר</title>
+<style>
+  @font-face {
+    font-family: "Heebo";
+    font-weight: 900;
+    src: url("fonts/heebo-hebrew-900-normal.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Heebo";
+    font-weight: 500;
+    src: url("fonts/heebo-hebrew-500-normal.woff2") format("woff2");
+  }
+
+  :root {
+    --bg: #07090c;
+    --ink: #f4f6f2;
+    --volt: #c8ff2e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+  }
+
+  /* Fixed 1920x1080 canvas, scaled to fit the window when previewing. */
+  #stage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: var(--bg);
+    font-family: "Heebo", sans-serif;
+    color: var(--ink);
+    transform-origin: center center;
+  }
+
+  .layer { position: absolute; inset: 0; }
+
+  #glow {
+    background:
+      radial-gradient(900px 520px at 50% 46%, rgba(200, 255, 46, 0.20), transparent 70%),
+      radial-gradient(1400px 700px at 50% 110%, rgba(200, 255, 46, 0.10), transparent 70%);
+  }
+
+  #stripes {
+    background: repeating-linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.028) 0 2px,
+      transparent 2px 46px
+    );
+  }
+
+  #vignette {
+    background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.72) 100%);
+  }
+
+  #flash { background: var(--volt); opacity: 0; }
+
+  #ecg { position: absolute; left: 0; top: 130px; width: 1920px; height: 240px; }
+  #ecg path {
+    fill: none;
+    stroke: var(--volt);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 14px rgba(200, 255, 46, 0.9));
+  }
+
+  #ring {
+    position: absolute;
+    left: 960px;
+    top: 250px;
+    width: 300px;
+    height: 300px;
+    margin: -150px 0 0 -150px;
+    border-radius: 50%;
+    border: 6px solid var(--volt);
+    opacity: 0;
+  }
+
+  #barbell {
+    position: absolute;
+    left: 960px;
+    top: 250px;
+    width: 460px;
+    height: 180px;
+    margin: -90px 0 0 -230px;
+    transform-origin: 50% 100%;
+    filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.6));
+  }
+
+  #title {
+    position: absolute;
+    left: 0;
+    top: 372px;
+    width: 1920px;
+    display: flex;
+    justify-content: center;
+    gap: 46px;
+    font-weight: 900;
+    font-size: 188px;
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+  .mask { display: block; overflow: hidden; padding: 26px 8px 34px; }
+  .mask > span { display: block; will-change: transform; }
+
+  #name {
+    position: absolute;
+    left: 0;
+    top: 648px;
+    width: 1920px;
+    display: flex;
+    justify-content: center;
+  }
+  #slabWrap { position: relative; padding: 10px 56px 16px; }
+  #slab {
+    position: absolute;
+    inset: 0;
+    background: var(--volt);
+    transform-origin: 100% 50%;
+    transform: skewX(-8deg);
+  }
+  #nameMask { position: relative; display: block; overflow: hidden; padding: 6px 4px 12px; }
+  #nameText {
+    display: block;
+    font-weight: 900;
+    font-size: 104px;
+    line-height: 1.05;
+    color: #07090c;
+  }
+
+  #eq {
+    position: absolute;
+    left: 0;
+    top: 860px;
+    width: 1920px;
+    height: 140px;
+    display: flex;
+    direction: ltr;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+  }
+  #eq i {
+    display: block;
+    width: 9px;
+    height: 140px;
+    border-radius: 5px;
+    background: var(--volt);
+    transform: scaleY(0);
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="layer" id="glow"></div>
+  <div class="layer" id="stripes"></div>
+
+  <div class="layer" id="shake">
+    <svg id="ecg" viewBox="0 0 1920 240" aria-hidden="true">
+      <!-- Drawn right-to-left, matching Hebrew reading direction. -->
+      <path id="ecgPath" d="M1920 120 H1330 L1300 96 L1270 120 H1210 L1180 150 L1140 10 L1095 228 L1060 120 H990 L955 78 L920 120 H820 L790 150 L750 10 L705 228 L670 120 H600 L565 78 L530 120 H0"/>
+    </svg>
+
+    <div id="ring"></div>
+
+    <svg id="barbell" viewBox="0 0 460 180" aria-hidden="true">
+      <rect x="0" y="80" width="460" height="20" rx="10" fill="#f4f6f2"/>
+      <rect x="36" y="56" width="22" height="68" rx="8" fill="#f4f6f2"/>
+      <rect x="402" y="56" width="22" height="68" rx="8" fill="#f4f6f2"/>
+      <rect x="66" y="10" width="44" height="160" rx="14" fill="#c8ff2e"/>
+      <rect x="350" y="10" width="44" height="160" rx="14" fill="#c8ff2e"/>
+      <rect x="118" y="34" width="30" height="112" rx="11" fill="#9ccc1c"/>
+      <rect x="312" y="34" width="30" height="112" rx="11" fill="#9ccc1c"/>
+    </svg>
+
+    <div id="title">
+      <span class="mask"><span id="w1">פודקאסט</span></span>
+      <span class="mask"><span id="w2">הכושר</span></span>
+    </div>
+
+    <div id="name">
+      <div id="slabWrap">
+        <div id="slab"></div>
+        <span id="nameMask"><span id="nameText">של ינאי בכר</span></span>
+      </div>
+    </div>
+
+    <div id="eq"></div>
+  </div>
+
+  <div class="layer" id="flash"></div>
+  <div class="layer" id="vignette"></div>
+</div>
+
+<script>
+(() => {
+  const DURATION = 5;
+  const $ = (id) => document.getElementById(id);
+
+  const clamp01 = (x) => Math.min(1, Math.max(0, x));
+  // Progress of t through [a, b], clamped to 0..1.
+  const p = (t, a, b) => clamp01((t - a) / (b - a));
+  const outExpo = (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x));
+  const outCubic = (x) => 1 - Math.pow(1 - x, 3);
+  const inCubic = (x) => x * x * x;
+  const outBack = (x) => 1 + 2.4 * Math.pow(x - 1, 3) + 1.4 * Math.pow(x - 1, 2);
+
+  const stage = $("stage");
+  const shake = $("shake");
+  const ecgPath = $("ecgPath");
+  const ecgLen = ecgPath.getTotalLength();
+  ecgPath.style.strokeDasharray = ecgLen;
+
+  const BARS = 64;
+  const eq = $("eq");
+  const bars = [];
+  for (let i = 0; i < BARS; i++) bars.push(eq.appendChild(document.createElement("i")));
+
+  const IMPACT = 1.05;
+
+  function renderAt(t) {
+    // Slow push-in over the whole clip.
+    const push = 1 + 0.045 * p(t, 0, DURATION);
+
+    // Camera shake on impact, decaying.
+    const sk = 1 - p(t, IMPACT, IMPACT + 0.4);
+    const shaking = t >= IMPACT && sk > 0;
+    const sx = shaking ? Math.sin(t * 95) * 16 * sk * sk : 0;
+    const sy = shaking ? Math.cos(t * 78) * 22 * sk * sk : 0;
+    shake.style.transform = `translate(${sx}px, ${sy}px) scale(${push})`;
+
+    // Background glow breathes in.
+    $("glow").style.opacity = 0.25 + 0.75 * outCubic(p(t, 0.9, 1.6));
+
+    // Heartbeat line draws in, then gives way to the barbell.
+    ecgPath.style.strokeDashoffset = ecgLen * (1 - outCubic(p(t, 0.08, 0.9)));
+    $("ecg").style.opacity = 1 - p(t, IMPACT, IMPACT + 0.35);
+
+    // Barbell drops, slams, and settles with a squash.
+    const drop = inCubic(p(t, 0.72, IMPACT));
+    const settle = p(t, IMPACT, IMPACT + 0.45);
+    const squash = t >= IMPACT ? Math.sin(settle * Math.PI * 3) * (1 - settle) * 0.16 : 0;
+    $("barbell").style.opacity = t < 0.72 ? 0 : 1;
+    $("barbell").style.transform =
+      `translateY(${(drop - 1) * 520}px) scale(${1 + squash}, ${1 - squash})`;
+
+    // Impact flash + shockwave ring.
+    $("flash").style.opacity = t >= IMPACT ? 0.42 * (1 - outCubic(p(t, IMPACT, IMPACT + 0.32))) : 0;
+    const rp = p(t, IMPACT, IMPACT + 0.75);
+    $("ring").style.opacity = t >= IMPACT ? (1 - rp) * 0.9 : 0;
+    $("ring").style.transform = `scale(${0.3 + outCubic(rp) * 5.2})`;
+
+    // Title words rise out of their masks.
+    $("w1").style.transform = `translateY(${(1 - outExpo(p(t, 1.2, 1.85))) * 125}%)`;
+    $("w2").style.transform = `translateY(${(1 - outExpo(p(t, 1.36, 2.0))) * 125}%)`;
+
+    // Name slab wipes in from the right, then the name rises.
+    $("slab").style.transform = `skewX(-8deg) scaleX(${outExpo(p(t, 1.9, 2.4))})`;
+    $("nameText").style.transform = `translateY(${(1 - outBack(p(t, 2.1, 2.6))) * 130}%)`;
+
+    // Equalizer: spreads out from the centre, then keeps pulsing like a voice.
+    for (let i = 0; i < BARS; i++) {
+      const d = Math.abs(i - (BARS - 1) / 2) / (BARS / 2);
+      const grow = outCubic(p(t, 2.3 + d * 0.45, 2.75 + d * 0.45));
+      const wave =
+        0.5 +
+        0.28 * Math.sin(t * 9.0 + i * 0.55) +
+        0.22 * Math.sin(t * 14.3 - i * 0.31 + 1.7);
+      const env = 0.35 + 0.65 * (1 - d * d);
+      bars[i].style.transform = `scaleY(${Math.max(0.06, wave * env) * grow})`;
+      bars[i].style.opacity = 0.35 + 0.65 * (1 - d);
+    }
+  }
+
+  window.renderAt = renderAt;
+  window.INTRO_DURATION = DURATION;
+
+  const rendering = new URLSearchParams(location.search).has("render");
+
+  function fit() {
+    const s = rendering ? 1 : Math.min(innerWidth / 1920, innerHeight / 1080);
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+  }
+  addEventListener("resize", fit);
+  fit();
+  renderAt(0);
+
+  if (!rendering) {
+    // Live preview: play, hold a moment, loop. Click to restart.
+    let start = null;
+    const tick = (now) => {
+      if (start === null) start = now;
+      const t = ((now - start) / 1000) % (DURATION + 1);
+      renderAt(Math.min(t, DURATION));
+      requestAnimationFrame(tick);
+    };
+    addEventListener("click", () => { start = null; });
+    document.fonts.ready.then(() => requestAnimationFrame(tick));
+  }
+})();
+</script>
+</body>
+</html>
